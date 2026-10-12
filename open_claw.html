@@ -1,0 +1,2433 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PyCamp — бесплатный курс Python с нуля</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d0f13'/%3E%3Ctext x='10' y='42' font-family='monospace' font-size='26' fill='%23ffd43b'%3E%26gt;_%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0f13; --bg2:#13161c; --bg3:#191d25; --line:#262c36; --line2:#333b47;
+  --tx:#eae8e2; --tx2:#c7ccd4; --mut:#8b93a0;
+  --acc:#ffd43b; --acc2:#f2c452; --blue:#6fa8d6; --ok:#7ee08a; --err:#ff7369;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --disp:'Unbounded',sans-serif;
+  --body:'Manrope',sans-serif;
+}
+*{box-sizing:border-box; margin:0; padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg); color:var(--tx); font:16px/1.65 var(--body); -webkit-font-smoothing:antialiased}
+::selection{background:var(--acc); color:#141414}
+a{color:var(--acc); text-decoration:none}
+a:hover{text-decoration:underline; text-underline-offset:4px}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--line2); border-radius:6px; border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:#454f5e}
+
+.wrap{max-width:1180px; margin:0 auto; padding:0 24px}
+.mono{font-family:var(--mono)}
+
+/* ---------- шапка ---------- */
+header{position:sticky; top:0; z-index:50; background:rgba(13,15,19,.92); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+.hdr{display:flex; align-items:center; gap:26px; height:62px}
+.logo{display:flex; align-items:center; gap:11px; cursor:pointer}
+.logo-mark{width:34px;height:34px;border:1px solid var(--line2);border-radius:9px;display:flex;align-items:center;justify-content:center;font:700 13px var(--mono); color:var(--acc); background:var(--bg2)}
+.logo b{font:700 17px var(--disp); letter-spacing:.02em}
+.logo span{font:500 10px var(--mono); color:var(--mut); display:block; letter-spacing:.18em; margin-top:1px}
+nav.main{display:flex; gap:22px; font:600 14px var(--body)}
+nav.main a{color:var(--tx2)}
+nav.main a:hover{color:var(--acc); text-decoration:none}
+nav.main a.active{color:var(--acc)}
+.hdr-sp{flex:1}
+.hdr-stats{display:flex; gap:10px; align-items:center}
+.chip{display:flex; align-items:center; gap:6px; font:600 12.5px var(--mono); color:var(--tx2); border:1px solid var(--line2); border-radius:20px; padding:4px 12px; background:var(--bg2)}
+.chip svg{color:var(--acc)}
+#hdrbar{position:absolute; left:0; bottom:-1px; height:2px; background:var(--acc); transition:width .6s ease}
+
+/* ---------- кнопки ---------- */
+.btn{font:700 14.5px var(--body); border:1px solid transparent; border-radius:9px; padding:11px 20px; cursor:pointer; display:inline-flex; gap:9px; align-items:center; transition:.15s; white-space:nowrap; color:var(--tx)}
+.btn:active{transform:translateY(1px)}
+.btn-p{background:var(--acc); color:#151310}
+.btn-p:hover{background:#ffe066}
+.btn-p:disabled{background:#5b5230; color:#221f14; cursor:wait}
+.btn-g{background:transparent; border-color:var(--line2)}
+.btn-g:hover{border-color:var(--acc2); color:var(--acc)}
+.btn-sm{padding:7px 13px; font-size:13px}
+.btn-ic{padding:8px 10px}
+
+/* ---------- hero ---------- */
+.hero{padding:78px 0 64px}
+.hero-grid{display:grid; grid-template-columns:1.06fr .94fr; gap:56px; align-items:center}
+.overline{font:600 12px var(--mono); letter-spacing:.24em; color:var(--acc); text-transform:uppercase; display:flex; align-items:center; gap:14px}
+.overline::after{content:""; height:1px; width:60px; background:var(--acc); opacity:.5}
+h1.big{font:700 clamp(30px,4.4vw,52px)/1.14 var(--disp); margin:22px 0 20px; letter-spacing:.005em}
+h1.big em{font-style:normal; color:var(--acc)}
+.hero-sub{color:var(--tx2); font-size:17px; max-width:520px; margin-bottom:30px}
+.hero-cta{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:34px}
+.hero-facts{display:flex; gap:0; border-top:1px solid var(--line); padding-top:22px}
+.fact{padding-right:26px; margin-right:26px; border-right:1px solid var(--line)}
+.fact:last-child{border:none}
+.fact b{display:block; font:700 21px var(--disp); color:var(--tx)}
+.fact i{font:500 11.5px var(--mono); color:var(--mut); font-style:normal; letter-spacing:.08em; text-transform:uppercase}
+.hero-prog{margin-top:22px; font:600 13px var(--mono); color:var(--mut)}
+.hero-prog b{color:var(--acc)}
+.hbar{height:4px; background:var(--bg3); border-radius:3px; margin-top:9px; overflow:hidden; max-width:420px}
+.hbar i{display:block; height:100%; background:var(--acc); border-radius:3px; transition:width .5s}
+
+/* ---------- терминал hero ---------- */
+.term{border:1px solid var(--line2); border-radius:14px; background:var(--bg2); overflow:hidden; box-shadow:0 24px 60px -24px rgba(0,0,0,.7)}
+.term-bar{display:flex; align-items:center; gap:10px; padding:11px 16px; border-bottom:1px solid var(--line); font:500 12px var(--mono); color:var(--mut)}
+.term-bar .dots{display:flex; gap:6px}
+.term-bar .dots i{width:9px;height:9px;border-radius:50%;background:var(--line2)}
+.term-cur{width:8px;height:15px;background:var(--acc);animation:blink 1.05s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.term-body{padding:18px 18px 20px; font:400 13.5px/1.75 var(--mono); min-height:252px}
+.term-body pre{white-space:pre-wrap; word-break:break-word}
+.term-cmd{color:var(--acc); margin-bottom:6px}
+.term-out{color:var(--tx2)}
+.term-out div{animation:tin .3s ease both}
+@keyframes tin{from{opacity:0; transform:translateY(3px)}}
+
+/* ---------- подсветка синтаксиса ---------- */
+.tk-cm{color:#5c6773; font-style:italic}
+.tk-str{color:#b3c98e}
+.tk-num{color:#d29a68}
+.tk-kw{color:#f2c452}
+.tk-bi{color:#86b5dc}
+.tk-fn{color:#e6d9a8}
+
+pre.code{background:var(--bg2); border:1px solid var(--line); border-radius:10px; padding:13px 16px; font:400 13.5px/1.7 var(--mono); overflow-x:auto; white-space:pre; margin:14px 0; color:var(--tx2)}
+pre.code.code-inline-label{margin-top:0}
+code.tok{font-family:var(--mono); font-size:.88em; background:var(--bg3); border:1px solid var(--line); border-radius:5px; padding:1px 6px; color:var(--acc2); white-space:nowrap}
+.note{border-left:3px solid var(--acc); background:rgba(255,212,59,.06); padding:12px 16px; border-radius:0 9px 9px 0; margin:14px 0; color:var(--tx2); font-size:14.5px}
+kbd{font:600 11.5px var(--mono); background:var(--bg3); border:1px solid var(--line2); border-bottom-width:2px; border-radius:5px; padding:2px 7px}
+
+/* ---------- тропа курса ---------- */
+.track-sec{padding:26px 0 70px}
+.sec-head{display:flex; align-items:baseline; gap:18px; flex-wrap:wrap; margin:14px 0 8px}
+h2.sec{font:700 clamp(22px,3vw,32px) var(--disp)}
+.sec-note{color:var(--mut); font:500 13.5px var(--body)}
+.search{display:flex; align-items:center; gap:9px; border:1px solid var(--line2); border-radius:9px; padding:8px 13px; background:var(--bg2); margin-left:auto; min-width:250px}
+.search svg{color:var(--mut); flex:none}
+.search input{background:none; border:none; outline:none; color:var(--tx); font:500 14px var(--body); width:100%}
+.search input::placeholder{color:var(--mut)}
+
+.track{position:relative; margin-top:26px}
+.track::before{content:""; position:absolute; left:27px; top:28px; bottom:34px; width:2px; background:var(--line)}
+.trk{position:relative; display:grid; grid-template-columns:56px 1fr; gap:0 22px; margin-bottom:8px}
+.trk.hide{display:none}
+.trk-node{position:relative; z-index:2; padding-top:8px}
+.ring{width:56px; height:56px; transform:rotate(-90deg)}
+.ring .bgc{fill:var(--bg2); stroke:var(--line2); stroke-width:3}
+.ring .fgc{fill:none; stroke:var(--acc); stroke-width:3; stroke-linecap:round; transition:stroke-dashoffset .5s}
+.ring text{transform:rotate(90deg); transform-origin:center; font:700 13px var(--mono); fill:var(--mut)}
+.trk.done .ring text{fill:var(--bg)}
+.trk-box{border:1px solid var(--line); border-radius:13px; background:var(--bg2); overflow:hidden}
+.trk-box:hover{border-color:var(--line2)}
+.trk-head{display:flex; align-items:center; gap:16px; padding:17px 20px; cursor:pointer; user-select:none}
+.trk-head:hover .trk-title{color:var(--acc)}
+.trk-title{font:700 18.5px var(--disp); transition:.15s}
+.trk-meta{margin-left:auto; font:500 12px var(--mono); color:var(--mut); white-space:nowrap}
+.trk-ch{color:var(--mut); transition:transform .25s; flex:none}
+.trk.open .trk-ch{transform:rotate(180deg)}
+.trk-list{display:grid; grid-template-rows:0fr; transition:grid-template-rows .3s ease}
+.trk.open .trk-list{grid-template-rows:1fr}
+.trk-list>div{overflow:hidden}
+.trk-lessons{padding:4px 20px 16px 20px; display:flex; flex-direction:column}
+.lsn{display:flex; align-items:center; gap:13px; padding:9px 6px; border-radius:8px; cursor:pointer; color:var(--tx2); font-weight:500}
+.lsn:hover{background:var(--bg3); color:var(--acc)}
+.lsn.hide{display:none}
+.lsn-dot{width:17px; height:17px; border:1.5px solid var(--line2); border-radius:5px; flex:none; display:flex; align-items:center; justify-content:center}
+.lsn.done .lsn-dot{background:var(--acc); border-color:var(--acc)}
+.lsn.done .lsn-dot svg{color:#151310}
+.lsn-t{font-size:14.5px}
+.lsn.done .lsn-t{color:var(--tx)}
+.lsn-num{margin-left:auto; font:500 11px var(--mono); color:var(--mut)}
+
+/* ---------- сертификат-тизер ---------- */
+.cert-tease{display:flex; align-items:center; gap:18px; border:1px solid var(--line2); border-radius:13px; padding:20px 24px; margin-top:34px; background:var(--bg2); flex-wrap:wrap}
+.cert-tease svg{color:var(--acc); flex:none}
+.cert-tease b{font:700 16px var(--disp)}
+.cert-tease p{color:var(--mut); font-size:14px}
+.cert-tease .btn{margin-left:auto}
+
+/* ---------- страница урока ---------- */
+.crumb{font:500 12px var(--mono); color:var(--mut); margin-bottom:12px; display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.crumb a{color:var(--acc2)}
+.crumb svg{opacity:.5}
+.lesson-head{padding:38px 0 26px; border-bottom:1px solid var(--line)}
+.lesson-head h1{font:700 clamp(20px,2.6vw,28px)/1.25 var(--disp)}
+.lesson-head .lmeta{display:flex; gap:16px; margin-top:10px; font:500 12px var(--mono); color:var(--mut); flex-wrap:wrap; align-items:center}
+.lmeta .pill{border:1px solid var(--line2); border-radius:20px; padding:2px 11px}
+.lmeta .pill.ok{border-color:rgba(126,224,138,.4); color:var(--ok)}
+
+.lesson-tabs{display:none; gap:8px; margin:16px 0}
+.lesson-tabs button{flex:1; padding:11px; font:700 13.5px var(--body); background:var(--bg2); border:1px solid var(--line2); color:var(--mut); border-radius:9px; cursor:pointer}
+.lesson-tabs button.on{color:var(--acc); border-color:var(--acc2)}
+
+.lesson-grid{display:grid; grid-template-columns:minmax(0,22fr) minmax(0,26fr); gap:30px; padding:28px 0 60px; align-items:start}
+.sec-t{font:700 11px var(--mono); letter-spacing:.2em; color:var(--acc); text-transform:uppercase; margin:30px 0 13px; display:flex; align-items:center; gap:12px}
+.sec-t::after{content:""; height:1px; flex:1; background:var(--line)}
+.sec-t:first-child{margin-top:2px}
+.th p{color:var(--tx2); margin-bottom:13px; font-size:15.5px}
+.th ul{margin:0 0 13px 20px; color:var(--tx2)}
+.th li{margin-bottom:6px}
+.th li::marker{color:var(--acc)}
+
+/* тесты */
+.tests{list-style:none}
+.tests li{display:grid; grid-template-columns:22px 1fr; gap:10px; padding:9px 0; border-bottom:1px dashed var(--line); color:var(--tx2); font-size:14.5px; align-items:start}
+.t-ic{width:20px;height:20px;border-radius:50%;border:1.5px dashed var(--line2); margin-top:2px; display:flex; align-items:center; justify-content:center; flex:none}
+.t-ic svg{display:none}
+li.t-run .t-ic{border-style:solid; border-color:var(--mut); background:var(--bg3)}
+li.t-pass .t-ic{border:none; background:var(--ok); color:#12290f}
+li.t-pass .t-ic, li.t-fail .t-ic{display:flex}
+li.t-pass .t-ic svg, li.t-fail .t-ic svg{display:block}
+li.t-fail .t-ic{border:none; background:var(--err); color:#2b0d0a}
+li.t-pass{color:var(--tx)}
+.t-msg{grid-column:2; color:var(--err); font:500 12.5px var(--mono); margin-top:4px; padding:7px 10px; background:rgba(255,115,105,.07); border-radius:6px}
+.t-count{font:600 12px var(--mono); color:var(--mut); margin:6px 0 14px}
+.t-count b{color:var(--ok)}
+.actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:6px}
+.success-banner{border:1px solid rgba(126,224,138,.35); background:rgba(126,224,138,.07); border-radius:11px; padding:16px 18px; margin-top:16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; animation:tin .35s ease}
+.success-banner b{color:var(--ok); font:700 15px var(--body)}
+.success-banner .btn{margin-left:auto}
+
+.sol-block{margin-top:22px}
+.sol-body{display:none; margin-top:10px}
+.sol-block.open .sol-body{display:block}
+.sol-warn{font:500 12.5px var(--mono); color:var(--mut); margin-top:8px}
+.btn.armed{border-color:var(--err); color:var(--err)}
+
+.lesson-nav{display:flex; gap:12px; margin-top:34px; padding-top:22px; border-top:1px solid var(--line)}
+.lesson-nav .btn{margin-left:auto}
+.lesson-nav .btn:first-child{margin-left:0; margin-right:auto}
+
+/* ---------- редактор ---------- */
+.col-ed{position:sticky; top:86px}
+.ed{border:1px solid var(--line2); border-radius:12px; background:var(--bg2); overflow:hidden}
+.ed-bar{display:flex; align-items:center; gap:12px; padding:9px 14px; border-bottom:1px solid var(--line); font:500 12px var(--mono); color:var(--mut)}
+.ed-file{color:var(--tx2)}
+.pyst{display:flex; align-items:center; gap:7px; font:500 11px var(--mono); color:var(--mut); letter-spacing:.05em}
+.pyst i{width:7px;height:7px;border-radius:50%;background:#5c6773; flex:none}
+.pyst.ready i{background:var(--ok); box-shadow:0 0 6px rgba(126,224,138,.6)}
+.pyst.load i{background:var(--acc); animation:blink 1s infinite}
+.ed-bar .btn{margin-left:auto}
+.ed-bar .btn+ .btn{margin-left:0}
+.ed-body{display:flex; height:min(48vh,460px); position:relative}
+.ed-gutter{width:46px; padding:14px 0; text-align:right; overflow:hidden; border-right:1px solid var(--line); color:#4d5665; font:400 14px/22px var(--mono); flex:none; background:var(--bg2)}
+.ed-gutter div{white-space:pre; padding-right:12px}
+.ed-scroll{position:relative; flex:1; min-width:0}
+.ed-hl, .ed-ta{position:absolute; inset:0; padding:14px 16px; font:400 14px/22px var(--mono); white-space:pre; overflow:auto; tab-size:4}
+.ed-hl{pointer-events:none; color:var(--tx2); background:var(--bg2)}
+.ed-ta{background:transparent; color:transparent; caret-color:var(--acc); border:none; outline:none; resize:none}
+.ed-ta::selection{background:rgba(255,212,59,.22); color:transparent}
+.ed-hl::-webkit-scrollbar{height:8px;width:8px}
+
+.console{border:1px solid var(--line2); border-top:none; border-radius:0 0 12px 12px; background:#0a0c0f; font:400 13px/1.6 var(--mono); padding:13px 16px; height:170px; overflow:auto; color:var(--tx2)}
+.console .c-ph{color:#4d5665; font-style:italic}
+.console .c-out{white-space:pre-wrap; word-break:break-word}
+.console .c-err{color:var(--err); white-space:pre-wrap; margin-top:10px; border-left:3px solid var(--err); padding-left:12px}
+.console .c-cmd{color:var(--acc); margin-bottom:4px}
+.console .c-inf{color:var(--mut); font-style:italic}
+
+/* ---------- сертификат ---------- */
+.cert-page{padding:56px 0 80px; max-width:860px; margin:0 auto}
+.cert-page h1{font:700 clamp(24px,3.4vw,38px) var(--disp); margin-bottom:8px}
+.cert-locked{border:1px dashed var(--line2); border-radius:13px; padding:34px; text-align:center; color:var(--tx2)}
+.cert-locked svg{color:var(--mut); margin-bottom:12px}
+.cert-edit{display:flex; gap:12px; margin:26px 0 18px; flex-wrap:wrap}
+.cert-edit input{background:var(--bg2); border:1px solid var(--line2); border-radius:9px; padding:11px 16px; color:var(--tx); font:700 16px var(--body); outline:none; min-width:260px}
+.cert-edit input:focus{border-color:var(--acc2)}
+.cert-sheet{border:1px solid var(--line2); outline:6px solid var(--bg2); border-radius:4px; padding:58px 40px; text-align:center; position:relative; background:radial-gradient(ellipse at 50% 0%, rgba(255,212,59,.045), transparent 60%), var(--bg2)}
+.cert-sheet::before{content:""; position:absolute; inset:14px; border:1px solid var(--line2); pointer-events:none}
+.cert-brand{font:900 15px var(--disp); letter-spacing:.3em; color:var(--acc)}
+.cert-kind{font:700 11px var(--mono); letter-spacing:.34em; color:var(--mut); margin:34px 0 10px; text-transform:uppercase}
+.cert-name{font:700 clamp(26px,4.5vw,44px) var(--disp); border-bottom:1px solid var(--line2); display:inline-block; padding:0 34px 12px; margin-bottom:34px}
+.cert-body{color:var(--tx2); font-size:15px; max-width:480px; margin:0 auto 34px}
+.cert-row{display:flex; justify-content:space-between; align-items:center; max-width:480px; margin:0 auto; font:500 12px var(--mono); color:var(--mut)}
+.cert-row b{color:var(--tx2)}
+.cert-actions{display:flex; gap:12px; justify-content:center; margin-top:26px}
+
+/* ---------- футер ---------- */
+footer{border-top:1px solid var(--line); padding:34px 0 44px; color:var(--mut); font-size:13.5px}
+footer .wrap{display:flex; gap:24px; flex-wrap:wrap; align-items:center}
+footer .f-brand{font:700 13px var(--mono); color:var(--tx2); letter-spacing:.12em}
+footer p{max-width:560px}
+footer a{color:var(--tx2)}
+
+/* ---------- тосты ---------- */
+#toasts{position:fixed; right:22px; bottom:22px; z-index:200; display:flex; flex-direction:column; gap:10px}
+.toast{display:flex; align-items:center; gap:12px; background:var(--bg3); border:1px solid var(--line2); border-left:3px solid var(--acc); border-radius:10px; padding:13px 18px; font:600 14px var(--body); color:var(--tx); box-shadow:0 12px 34px -10px rgba(0,0,0,.7); animation:tin .3s ease; max-width:360px}
+.toast.ok{border-left-color:var(--ok)} .toast.ok svg{color:var(--ok)}
+.toast.err{border-left-color:var(--err)} .toast.err svg{color:var(--err)}
+.toast svg{color:var(--acc); flex:none}
+.toast.out{opacity:0; transform:translateX(20px); transition:.35s}
+
+#confetti{position:fixed; inset:0; pointer-events:none; z-index:300}
+
+/* ---------- модал ---------- */
+#modal{position:fixed; inset:0; z-index:400; background:rgba(8,9,12,.8); display:none; align-items:center; justify-content:center; padding:20px}
+#modal.show{display:flex}
+.modal-card{background:var(--bg2); border:1px solid var(--line2); border-radius:16px; padding:38px 40px; max-width:440px; text-align:center; animation:tin .3s ease}
+.modal-card svg{color:var(--acc); margin-bottom:16px}
+.modal-card h3{font:700 21px var(--disp); margin-bottom:10px}
+.modal-card p{color:var(--tx2); margin-bottom:24px}
+
+/* ---------- адаптив ---------- */
+@media(max-width:980px){
+  .hero-grid{grid-template-columns:1fr; gap:36px}
+  .hero{padding:52px 0 44px}
+  .lesson-grid{grid-template-columns:1fr; padding-top:18px}
+  .col-ed{position:static}
+  .lesson-tabs{display:flex}
+  body[data-tab="ed"] .col-th{display:none}
+  body:not([data-tab="ed"]) .col-ed{display:none}
+  nav.main{display:none}
+  .hdr-stats .chip.streak{display:none}
+}
+@media(max-width:560px){
+  .hero-facts{flex-wrap:wrap; gap:16px 0}
+  .fact{width:50%; border:none; padding:0}
+  .ed-body{height:min(52vh,380px)}
+  .search{margin-left:0; width:100%}
+}
+@media print{
+  header,footer,#toasts,.cert-edit,.cert-actions,.cert-locked{display:none!important}
+  body{background:#fff; color:#000}
+  .cert-sheet{border-color:#999; background:#fff}
+}
+</style>
+</head>
+<body data-tab="th">
+
+<header>
+  <div class="wrap hdr">
+    <div class="logo" onclick="location.hash='#/'">
+      <div class="logo-mark">&gt;_</div>
+      <div><b>PyCamp</b><span>КУРС PYTHON</span></div>
+    </div>
+    <nav class="main" id="mainnav">
+      <a href="#/" data-r="/">Программа курса</a>
+      <a href="#/cert" data-r="/cert">Сертификат</a>
+    </nav>
+    <div class="hdr-sp"></div>
+    <div class="hdr-stats">
+      <div class="chip streak" title="Дней подряд" id="hdrStreak"></div>
+      <div class="chip" title="Опыт" id="hdrXp"></div>
+    </div>
+  </div>
+  <div id="hdrbar"></div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div class="wrap">
+    <span class="f-brand">PYCAMP</span>
+    <p>Бесплатный открытый курс Python. Код исполняется настоящим интерпретатором CPython 3.11, скомпилированным в WebAssembly (проект Pyodide), — прямо в твоём браузере, без серверов и регистрации.</p>
+    <a href="#/" style="margin-left:auto">К программе курса</a>
+  </div>
+</footer>
+
+<div id="toasts"></div>
+<canvas id="confetti"></canvas>
+<div id="modal"><div class="modal-card" id="modalCard"></div></div>
+
+<script>
+/* ================================================================
+   PyCamp — одностраничная учебная платформа Python
+   ================================================================ */
+'use strict';
+
+/* ---------- утилиты ---------- */
+const $  = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const app = $('#app');
+const escH = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const norm = s => String(s).replace(/\r/g,'').replace(/^\n+|\n+$/g,'');
+const plural = (n, f) => { const c=[2,0,1,1,1,2][(n%100>4&&n%100<20)?2:[2,0,1,1,1,2][Math.min(n%10,5)]]; return f[[(n%100>4&&n%100<20)?2:Math.min(n%10,5)]||2] || f[2]; };
+
+/* ---------- SVG-иконки ---------- */
+const ICONS = {
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  play:'<path d="m6 4 13 8-13 8V4z" fill="currentColor" stroke="none"/>',
+  flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+  zap:'<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
+  award:'<circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/>',
+  chev:'<path d="m6 9 6 6 6-6"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+  reset:'<path d="M3 12a9 9 0 1 0 2.6-6.4L3 8"/><path d="M3 3v5h5"/>',
+  arrl:'<path d="M19 12H5m7-7-7 7 7 7"/>',
+  arrr:'<path d="M5 12h14m-7-7 7 7-7 7"/>',
+  book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20"/>',
+};
+const ic = (n, s=18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]}</svg>`;
+
+/* ---------- подсветка Python ---------- */
+const KW = /^(False|None|True|and|as|assert|async|await|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield|match|case|self)$/;
+const BI = /^(print|len|range|input|int|str|float|bool|list|dict|set|tuple|sum|min|max|abs|round|sorted|reversed|enumerate|zip|map|filter|type|isinstance|open|repr|next|iter|any|all|super|string|json)$/;
+const TOKRE = /("""[\s\S]*?"""|'''[\s\S]*?'''|[fFrRbBuU]{0,2}"(?:[^"\\\n]|\\.)*"|[fFrRbBuU]{0,2}'(?:[^'\\\n]|\\.)*'|#[^\n]*|\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b|\b[A-Za-z_]\w*\b)/g;
+function hl(src){
+  let out='', last=0, m;
+  TOKRE.lastIndex = 0;
+  while((m = TOKRE.exec(src))){
+    out += escH(src.slice(last, m.index));
+    const tk = m[0];
+    let cls = null;
+    if (tk[0] === '#') cls = 'tk-cm';
+    else if (/^[fFrRbBuU]{0,2}["']/.test(tk)) cls = 'tk-str';
+    else if (/^\d/.test(tk)) cls = 'tk-num';
+    else if (KW.test(tk)) cls = 'tk-kw';
+    else if (BI.test(tk)) cls = 'tk-bi';
+    else if (src[m.index + tk.length] === '(') cls = 'tk-fn';
+    out += cls ? `<span class="${cls}">${escH(tk)}</span>` : escH(tk);
+    last = m.index + tk.length;
+  }
+  return out + escH(src.slice(last));
+}
+/* рендер теоретических блоков: <c>…</c> → подсвеченный pre, <k>…</k> → инлайн-код */
+function renderTh(html){
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  $$('c', tmp).forEach(el => {
+    const pre = document.createElement('pre');
+    pre.className = 'code';
+    pre.textContent = el.textContent.replace(/^\n+|\n+$/g,'') + '\n';
+    el.replaceWith(pre);
+  });
+  $$('k', tmp).forEach(el => {
+    const k = document.createElement('code');
+    k.className = 'tok';
+    k.textContent = el.textContent;
+    el.replaceWith(k);
+  });
+  $$('pre.code', tmp).forEach(pre => { pre.innerHTML = hl(pre.textContent); });
+  return tmp.innerHTML;
+}
+
+/* ================================================================
+   ХЕЛПЕРЫ ТЕСТОВ
+   O — точное совпадение вывода;  H — вывод содержит;  C — код содержит;
+   P — python-тест (assert);      V — python-проверка значения
+   ================================================================ */
+const O = (txt, exp)  => ({ txt, js:(c,o)=> norm(o) === norm(exp) });
+const H = (txt, re)   => ({ txt, js:(c,o)=> re.test(norm(o)) });
+const C = (txt, re)   => ({ txt, js:(c)=> re.test(c) });
+const P = (txt, code) => ({ txt, py: code });
+const V = (txt, a, b) => P(txt, `assert (${a}) == (${b}), ${JSON.stringify(txt)}`);
+
+/* ================================================================
+   ПРОГРАММА КУРСА — 13 модулей, 83 урока
+   ================================================================ */
+const COURSE = [
+/* ============ 01. ПЕРВЫЕ ШАГИ ============ */
+{ id:'m1', title:'Первые шаги', desc:'print, переменные, типы данных и первый ввод с клавиатуры', lessons:[
+{ id:'m1-print', t:'print() — первая программа', th:`
+<p>Любая программа начинает жить с вывода. В Python за это отвечает функция <k>print()</k>: она печатает на экран всё, что ты ей передашь в скобках. Текст всегда пишется в кавычках — так Python отличает строки от кода.</p>
+<c>print("Привет, мир!")
+print(42)</c>
+<p>Одна команда <k>print()</k> — одна строка вывода. Каждая инструкция в Python живёт на своей строке, точки с запятой не нужны.</p>
+<div class="note">Совет: набирай примеры руками, а не копируй — пальцы запоминают синтаксис быстрее глаз.</div>`,
+task:`<ul><li>Напиши программу, которая выводит на экран строку <k>Привет, Python!</k></li></ul>`,
+code:`# Напиши код ниже этой строки\n`,
+sol:`print("Привет, Python!")\n`,
+tests:[
+  O('Вывод программы должен быть: Привет, Python!', 'Привет, Python!'),
+  C('В решении должна использоваться функция print()', /print\s*\(/),
+]},
+{ id:'m1-vars', t:'Переменные — ярлыки для данных', th:`
+<p>Переменная — это имя, к которому привязано значение. Создаётся переменная одним знаком <k>=</k>: слева имя, справа значение. Знак <k>=</k> — это не «равно» из математики, а команда «положи значение в коробку».</p>
+<c>name = "Гвидо"
+lang = "Python"
+print(name, lang)</c>
+<p>Имена переменных пишут латиницей, без пробелов, цифр в начале и зарезервированных слов. Читай <k>lang</k> вслух как «lang — это Python».</p>
+<div class="note">Запятая внутри print() выводит значения через пробел: <k>print(name, lang)</k> даст «Гвидо Python».</div>`,
+task:`<ul><li>Создай переменную <k>name</k> со значением <k>"Гвидо"</k></li><li>Создай переменную <k>lang</k> со значением <k>"Python"</k></li><li>Выведи обе переменные одной командой <k>print()</k></li></ul>`,
+code:`# создай переменные и выведи их\n`,
+sol:`name = "Гвидо"\nlang = "Python"\nprint(name, lang)\n`,
+tests:[
+  V('Переменная name должна быть равна "Гвидо"', 'name', '"Гвидо"'),
+  V('Переменная lang должна быть равна "Python"', 'lang', '"Python"'),
+  O('Вывод должен быть: Гвидо Python', 'Гвидо Python'),
+]},
+{ id:'m1-multi', t:'Несколько значений и комментарии', th:`
+<p><k>print()</k> умеет печатать сразу несколько значений через запятую — между ними автоматически вставится пробел. Так удобно выводить подпись и результат вычисления вместе.</p>
+<c>price = 249
+count = 3
+print("Цена:", price * count)   # Цена: 747</c>
+<p>Всё после символа <k>#</k> до конца строки — <b>комментарий</b>: Python его игнорирует, а люди читают. Хорошие комментарии объясняют «зачем», а не «что».</p>`,
+task:`<ul><li>Переменная <k>price</k> равна <k>249</k>, переменная <k>count</k> равна <k>3</k></li><li>Посчитай <k>total</k> — общую стоимость</li><li>Выведи строку в формате <k>Итог: 747</k> с помощью запятой в print()</li><li>Добавь в код хотя бы один комментарий</li></ul>`,
+code:`price = 249\ncount = 3\n\n# посчитай total и выведи итог\n`,
+sol:`price = 249\ncount = 3\n\n# общая стоимость покупки\ntotal = price * count\nprint("Итог:", total)\n`,
+tests:[
+  V('Переменная total должна быть равна 747', 'total', '747'),
+  O('Вывод должен быть: Итог: 747', 'Итог: 747'),
+  C('В коде должен быть комментарий (символ #)', /#/),
+]},
+{ id:'m1-reassign', t:'Изменение переменной', th:`
+<p>Значение переменной можно менять сколько угодно раз — старое просто забывается. А чтобы «добавить к текущему значению», есть сокращения: <k>+=</k>, <k>-=</k>, <k>*=</k>, <k>/=</k>.</p>
+<c>views = 100
+views = views + 50   # то же самое:
+views += 50          # вот это
+print(views)         # 200</c>
+<p><k>x += 5</k> читается как «увеличь x на 5». Это самая частая операция в счётчиках, суммах и накопителях — дальше в курсе ты будешь использовать её постоянно.</p>`,
+task:`<p>Счётчик просмотров видео:</p><ul><li>Начальное значение <k>views</k> — <k>100</k></li><li>Два раза увеличь его через <k>+=</k>: сначала на <k>50</k>, потом на <k>25</k></li><li>Выведи итоговое значение <k>print(views)</k></li></ul>`,
+code:`views = 100\n\n# увеличь счётчик дважды и выведи его\n`,
+sol:`views = 100\nviews += 50\nviews += 25\nprint(views)\n`,
+tests:[
+  V('Переменная views должна стать равной 175', 'views', '175'),
+  O('Вывод должен быть: 175', '175'),
+  C('Используй оператор += хотя бы один раз', /\+=/),
+]},
+{ id:'m1-types', t:'Типы данных: int, float, str, bool', th:`
+<p>У каждого значения в Python есть тип. Четыре базовых, которые встречаются в 90% кода:</p>
+<ul><li><k>int</k> — целые числа: <k>42</k>, <k>-7</k></li><li><k>float</k> — дробные: <k>19.99</k></li><li><k>str</k> — строки текста: <k>"Python"</k></li><li><k>bool</k> — истина или ложь: <k>True</k>, <k>False</k></li></ul>
+<p>Узнать тип поможет функция <k>type()</k>:</p>
+<c>print(type(42))      # &lt;class 'int'&gt;
+print(type(19.99))     # &lt;class 'float'&gt;</c>
+<p>Текст <k>"5"</k> и число <k>5</k> — совершенно разные вещи: строку нельзя умножить на строку, а число — можно складывать с числами. Type matters.</p>`,
+task:`<ul><li>Создай <k>count</k> = 42 (целое), <k>price</k> = 19.99 (дробное), <k>title</k> = "Курс" (строка), <k>is_done</k> = True (булево)</li><li>Выведи <k>type()</k> для каждой переменной</li></ul>`,
+code:`# создай 4 переменные разных типов и выведи их типы\n`,
+sol:`count = 42\nprice = 19.99\ntitle = "Курс"\nis_done = True\n\nprint(type(count))\nprint(type(price))\nprint(type(title))\nprint(type(is_done))\n`,
+tests:[
+  P('count должен быть целым числом (int)', 'assert isinstance(count, int), "переменная count должна быть целым числом (int)"'),
+  P('price должен быть дробным числом (float)', 'assert isinstance(price, float), "переменная price должна быть числом с плавающей точкой (float)"'),
+  P('title должен быть строкой (str)', 'assert isinstance(title, str), "переменная title должна быть строкой (str)"'),
+  P('is_done должен быть булевым значением (bool)', 'assert isinstance(is_done, bool), "переменная is_done должна быть True или False (bool)"'),
+  H('В выводе должен быть тип <class \'int\'>', /<class 'int'>/),
+]},
+{ id:'m1-input', t:'Ввод данных: input()', th:`
+<p>Программа оживает, когда с ней говорит человек. Функция <k>input()</k> останавливает программу и ждёт, пока пользователь что-нибудь наберёт. Введённое значение всегда приходит <b>строкой</b> — даже если ввели цифры.</p>
+<c>name = input()
+print("Привет,", name)</c>
+<p>Если в скобках написать текст — он появится как подсказка перед вводом: <k>input("Твоё имя: ")</k>.</p>
+<div class="note">В этом уроке «пользователь» — это мы: тесты автоматически вводят за тебя строку «Гвидо». Вызывай <k>input()</k> без аргументов, чтобы вывод был предсказуемым.</div>`,
+task:`<ul><li>Считай имя пользователя в переменную <k>name</k> через <k>input()</k> (без текста в скобках)</li><li>Выведи строку вида <k>Привет, Гвидо!</k></li></ul>`,
+code:`# считай имя и поприветствуй пользователя\n`,
+sol:`name = input()\nprint("Привет, " + name + "!")\n`,
+stdin:'Гвидо\n',
+tests:[
+  C('Должна использоваться функция input()', /input\s*\(\s*\)/),
+  P('Переменная name должна содержать введённую строку "Гвидо"', 'assert name == "Гвидо", "переменная name должна содержать то, что вернул input()"'),
+  O('Вывод должен быть: Привет, Гвидо!', 'Привет, Гвидо!'),
+]},
+]},
+
+/* ============ 02. ЧИСЛА И АРИФМЕТИКА ============ */
+{ id:'m2', title:'Числа и арифметика', desc:'Четыре действия, целочисленное деление, степень, округление', lessons:[
+{ id:'m2-arith', t:'Четыре действия', th:`
+<p>Python — идеальный калькулятор: <k>+ - * /</k> работают как в школе. Важная деталь: деление <k>/</k> <b>всегда</b> возвращает дробное число, даже если делится нацело.</p>
+<c>a = 12
+b = 5
+print(a + b)   # 17
+print(a - b)   # 7
+print(a * b)   # 60
+print(a / b)   # 2.4</c>
+<p>Порядок действий — как в математике: сначала умножение и деление, потом сложение и вычитание. Скобки меняют приоритет.</p>`,
+task:`<ul><li>Даны <k>a = 12</k> и <k>b = 5</k></li><li>Выведи (каждый на своей строке): сумму, разность, произведение и частное</li></ul>`,
+code:`a = 12\nb = 5\n\n# выведи результат четырёх действий\n`,
+sol:`a = 12\nb = 5\n\nprint(a + b)\nprint(a - b)\nprint(a * b)\nprint(a / b)\n`,
+tests:[
+  O('Вывод должен быть четырьмя строками: 17, 7, 60 и 2.4', '17\n7\n60\n2.4'),
+]},
+{ id:'m2-divmod', t:'Целочисленное деление и остаток', th:`
+<p>Два героя повседневных задач: <k>//</k> — целочисленное деление («сколько целых раз помещается») и <k>%</k> — остаток («сколько останется»).</p>
+<c>17 // 5   # 3  — пять помещается три раза
+17 % 5    # 2  — и остаётся два</c>
+<p>Классика: 100 конфет по 7 в коробку — это <k>100 // 7</k> полных коробок и <k>100 % 7</k> конфет сверх них. Остаток также проверяет чётность: <k>n % 2 == 0</k>.</p>`,
+task:`<p>В магазине 59 шоколадок, в одну коробку помещается 7.</p><ul><li>Посчитай <k>boxes</k> — сколько полных коробок получится</li><li>Посчитай <k>left</k> — сколько шоколадок останется</li><li>Выведи две строки: <k>Коробок: 8</k> и <k>Осталось: 3</k></li></ul>`,
+code:`candies = 59\nper_box = 7\n\n# посчитай boxes и left, затем выведи\n`,
+sol:`candies = 59\nper_box = 7\n\nboxes = candies // per_box\nleft = candies % per_box\nprint("Коробок:", boxes)\nprint("Осталось:", left)\n`,
+tests:[
+  V('boxes должен быть равен 8', 'boxes', '8'),
+  V('left должен быть равен 3', 'left', '3'),
+  O('Вывод: две строки — Коробок: 8 и Осталось: 3', 'Коробок: 8\nОсталось: 3'),
+]},
+{ id:'m2-pow', t:'Возведение в степень', th:`
+<p>Оператор <k>**</k> возводит число в степень. Работает и с большими числами — Python не боится длинной арифметики.</p>
+<c>2 ** 10    # 1024
+5 ** 0      # 1 — любое число в нулевой степени</c>
+<p>Байты, биты и объёмы данных считают именно степенями двойки: 1 килобайт = 2<sup>10</sup>, а 65536 — это 2<sup>16</sup>.</p>
+<div class="note">Не путай <k>2 ** 16</k> с <k>2 ^ 16</k>: в Python <k>^</k> — это совсем другой оператор (побитовое исключающее ИЛИ), ловушка номер один у новичков.</div>`,
+task:`<ul><li>Вычисли <k>bits</k> — количество значений, которое помещается в 16 бит: <k>2 ** 16</k></li><li>Выведи строку в формате <k>Значений: 65536</k></li></ul>`,
+code:`# посчитай 2 в 16 степени и выведи результат\n`,
+sol:`bits = 2 ** 16\nprint("Значений:", bits)\n`,
+tests:[
+  V('bits должен быть равен 65536', 'bits', '65536'),
+  O('Вывод должен быть: Значений: 65536', 'Значений: 65536'),
+]},
+{ id:'m2-round', t:'Округление и модуль числа', th:`
+<p>Функции <k>round()</k> и <k>abs()</k> приводят числа в порядок. <k>round(x, n)</k> округляет до n знаков после запятой, <k>abs()</k> снимает минус.</p>
+<c>round(3.14159, 2)   # 3.14
+abs(-7)             # 7</c>
+<p>Классическая формула — перевод Цельсия в Фаренгейты: <k>F = C * 9 / 5 + 32</k>. Результат выходит длинным, и его округляют для красоты.</p>`,
+task:`<ul><li>Дано <k>celsius = 36.6</k></li><li>Вычисли <k>f</k> по формуле <k>celsius * 9 / 5 + 32</k></li><li>Выведи <k>round(f, 1)</k> — должно получиться <k>97.9</k></li></ul>`,
+code:`celsius = 36.6\n\n# переведи в фаренгейты и округли\n`,
+sol:`celsius = 36.6\nf = celsius * 9 / 5 + 32\nprint(round(f, 1))\n`,
+tests:[
+  P('f должен быть примерно равен 97.88', 'assert abs(f - 97.88) < 0.01, "f должен быть равен 36.6 * 9 / 5 + 32"'),
+  O('Вывод должен быть: 97.9', '97.9'),
+]},
+{ id:'m2-project', t:'Проект: минуты в часы', th:`
+<p>Первый мини-проект: превратить «325 минут» в человеческое «5 ч 25 мин». Вся магия — в паре <k>//</k> и <k>%</k>: деление на 60 даёт часы, остаток — минуты.</p>
+<c>total = 130
+hours = total // 60    # 2
+mins = total % 60      # 10</c>
+<p>Собери ответ строкой и выведи. Ты только что написал фрагмент плеера, таймтрекера и мессенджера — они делают ровно это.</p>`,
+task:`<ul><li>Дано <k>total_min = 325</k></li><li>Посчитай <k>hours</k> (полные часы) и <k>minutes</k> (остаток минут)</li><li>Выведи строку в формате <k>5 ч 25 мин</k> — например, через f-строку или запятые</li></ul>`,
+code:`total_min = 325\n\n# вычисли hours и minutes, затем собери строку\n`,
+sol:`total_min = 325\n\nhours = total_min // 60\nminutes = total_min % 60\nprint(f"{hours} ч {minutes} мин")\n`,
+tests:[
+  V('hours должен быть равен 5', 'hours', '5'),
+  V('minutes должен быть равен 25', 'minutes', '25'),
+  O('Вывод должен быть: 5 ч 25 мин', '5 ч 25 мин'),
+]},
+]},
+
+/* ============ 03. СТРОКИ ============ */
+{ id:'m3', title:'Строки', desc:'Индексы, срезы, методы и f-строки', lessons:[
+{ id:'m3-len', t:'Строки и len()', th:`
+<p>Строка — цепочка символов. Создаётся кавычками: одинарными или двойными, разницы нет. Функция <k>len()</k> возвращает длину строки в символах.</p>
+<c>word = "программирование"
+print(len(word))    # 15</c>
+<p>Пробелы и знаки тоже символы: <k>len("a b")</k> — это 3. А пустая строка <k>""</k> имеет длину 0.</p>`,
+task:`<ul><li>Создай переменную <k>word</k> со строкой <k>программирование</k></li><li>Выведи её длину с помощью <k>len()</k></li></ul>`,
+code:`# создай word и выведи его длину\n`,
+sol:`word = "программирование"\nprint(len(word))\n`,
+tests:[
+  P('word должен содержать строку "программирование"', 'assert word == "программирование", "переменная word должна быть строкой \\"программирование\\""'),
+  O('Вывод должен быть: 15', '15'),
+  C('Используй функцию len()', /len\s*\(/),
+]},
+{ id:'m3-index', t:'Индексация: первый и последний символ', th:`
+<p>К каждому символу строки можно обратиться по номеру — <b>индексу</b>. Нумерация начинается с <b>нуля</b>, это важно запомнить навсегда. Отрицательные индексы считают с конца: <k>-1</k> — последний символ.</p>
+<c>s = "Python"
+s[0]     # 'P'
+s[1]     # 'y'
+s[-1]    # 'n'</c>
+<p>Строка «Python»: P — 0, y — 1, t — 2… а с конца: n — -1, o — -2.</p>`,
+task:`<ul><li>Дано <k>word = "программа"</k></li><li>Запиши в <k>first</k> первый символ, в <k>last</k> — последний</li><li>Выведи оба одной командой: <k>print(first, last)</k></li></ul>`,
+code:`word = "программа"\n\n# запиши first и last, затем выведи их\n`,
+sol:`word = "программа"\n\nfirst = word[0]\nlast = word[-1]\nprint(first, last)\n`,
+tests:[
+  P('first должен быть равен "п"', 'assert first == "п", "first должен содержать первый символ слова"'),
+  P('last должен быть равен "а"', 'assert last == "а", "last должен содержать последний символ слова"'),
+  O('Вывод должен быть: п а', 'п а'),
+]},
+{ id:'m3-slice', t:'Срезы: часть строки', th:`
+<p>Срез <k>[a:b]</k> вырезает подстроку: с индекса <k>a</k> включительно по <k>b</k> не включительно. Границы можно опускать: <k>[a:]</k> — «до конца», <k>[:b]</k> — «с начала».</p>
+<c>text = "Hello, Python"
+text[7:13]   # 'Python'
+text[7:]     # 'Python'
+text[:5]     # 'Hello'</c>
+<p>Трюк с третьим аргументом: <k>[::-1]</k> разворачивает строку задом наперёд — классический приём.</p>
+<c>text[::-1]   # 'nohtyP ,olleH'</c>`,
+task:`<p>Дано <k>text = "Hello, Python"</k>.</p><ul><li>Выведи слово <k>Python</k>, взяв его срезом с 7-го индекса до конца</li><li>Выведи строку <k>text</k>, развёрнутую наоборот (срезом с шагом -1)</li></ul>`,
+code:`text = "Hello, Python"\n\n# два среза и два вывода\n`,
+sol:`text = "Hello, Python"\n\nprint(text[7:])\nprint(text[::-1])\n`,
+tests:[
+  O('Две строки вывода: Python и nohtyP ,olleH', 'Python\nnohtyP ,olleH'),
+  C('Используй квадратные скобки для срезов', /\[/),
+]},
+{ id:'m3-concat', t:'Склейка и умножение строк', th:`
+<p>Строки складываются через <k>+</k> и «размножаются» через <k>*</k>. Из двух простых приёмов собираются рамки, разделители и орнаменты вывода.</p>
+<c>greeting = "Привет, " + "мир!"
+line = "-" * 20          # двадцать дефисов
+print("+" + "-" * 10 + "+")</c>
+<div class="note">Складывать строку с числом нельзя — <k>"a" + 5</k> вызовет ошибку TypeError. Число сначала превращают в строку: <k>str(5)</k>. О f-строках, где всё проще, — в конце модуля.</div>`,
+task:`<ul><li>Собери строку <k>line</k> из плюса, десяти дефисов и плюса: <k>+----------</k>…</li><li>Выведи <k>line</k> — должно получиться <k>+----------</k> (плюс, 10 дефисов, плюс)</li></ul>`,
+code:`# собери line и выведи её\n`,
+sol:`line = "+" + "-" * 10 + "+"\nprint(line)\n`,
+tests:[
+  P('line должен быть равен "+----------+"', 'assert line == "+" + "-" * 10 + "+", "line должна быть рамкой из плюса, десяти дефисов и плюса"'),
+  O('Вывод должен быть: +----------+', '+----------+'),
+]},
+{ id:'m3-methods', t:'Методы строк', th:`
+<p>Методы — функции «внутри» строки, вызываются через точку: <k>строка.метод()</k>. Они не меняют исходную строку, а возвращают новую.</p>
+<c>s = "  Python — это просто  "
+s.strip()          # обрезать пробелы по краям
+s.strip().upper()  # PYTHON — ЭТО ПРОСТО
+s.replace("просто", "мощно")</c>
+<ul><li><k>upper()</k> / <k>lower()</k> — регистр</li><li><k>strip()</k> — обрезать края</li><li><k>replace(a, b)</k> — заменить подстроку</li><li><k>count(x)</k> — посчитать вхождения</li></ul>
+<p>Методы можно цеплять: <k>phrase.strip().upper()</k> — сначала обрезка, потом верхний регистр.</p>`,
+task:`<p>Дано <k>phrase = "  Python — это просто  "</k> (с пробелами по краям).</p><ul><li>Запиши в <k>clean</k> результат <k>phrase.strip()</k></li><li>Выведи <k>clean.upper()</k></li><li>Выведи <k>clean.replace("просто", "мощно")</k></li></ul>`,
+code:`phrase = "  Python — это просто  "\n\n# обрежь пробелы и примени методы\n`,
+sol:`phrase = "  Python — это просто  "\n\nclean = phrase.strip()\nprint(clean.upper())\nprint(clean.replace("просто", "мощно"))\n`,
+tests:[
+  P('clean должен быть равен "Python — это просто"', 'assert clean == "Python — это просто", "clean должен содержать строку без пробелов по краям"'),
+  O('Две строки: PYTHON — ЭТО ПРОСТО и Python — это мощно', 'PYTHON — ЭТО ПРОСТО\nPython — это мощно'),
+]},
+{ id:'m3-fstring', t:'f-строки: красивое форматирование', th:`
+<p>f-строка — король форматирования. Поставь <k>f</k> перед кавычками — и вставляй переменные прямо в текст в фигурных скобках.</p>
+<c>name = "Гвидо"
+age = 37
+print(f"Меня зовут {name}, мне {age} лет")</c>
+<p>Внутри <k>{ }</k> можно писать и выражения: <k>f"Через год будет {age + 1}"</k>. Это самый читаемый способ собирать строки — используй его везде вместо склейки через <k>+</k>.</p>`,
+task:`<ul><li>Даны <k>name = "Гвидо"</k> и <k>age = 37</k></li><li>Собери в переменную <k>message</k> f-строку: <k>Меня зовут Гвидо, мне 37 лет</k></li><li>Выведи <k>message</k></li></ul>`,
+code:`name = "Гвидо"\nage = 37\n\n# собери message через f-строку\n`,
+sol:`name = "Гвидо"\nage = 37\n\nmessage = f"Меня зовут {name}, мне {age} лет"\nprint(message)\n`,
+tests:[
+  P('message должен быть равен "Меня зовут Гвидо, мне 37 лет"', 'assert message == "Меня зовут Гвидо, мне 37 лет", "message должен содержать точный текст из задания"'),
+  O('Вывод должен быть: Меня зовут Гвидо, мне 37 лет', 'Меня зовут Гвидо, мне 37 лет'),
+  C('Используй f-строку (f перед кавычками)', /f["']/),
+]},
+]},
+
+/* ============ 04. УСЛОВИЯ ============ */
+{ id:'m4', title:'Условия', desc:'if / else / elif, логика и match-case', lessons:[
+{ id:'m4-if', t:'if: решение в коде', th:`
+<p>Условие — точка, где программа выбирает путь. Конструкция: <k>if условие:</k>, затем <b>отступ в 4 пробела</b> и тело — код, который выполнится только если условие истинно.</p>
+<c>temp = 22
+if temp > 20:
+    print("Тепло!")</c>
+<p>Отступы в Python — не украшение, а часть синтаксиса: именно они показывают, что внутри условия. Операторы сравнения: <k>&gt;</k> <k>&lt;</k> <k>&gt;=</k> <k>&lt;=</k> <k>==</k> (равно!) и <k>!=</k>.</p>
+<div class="note">Два знака равенства — сравнение, один — присваивание. <k>x = 5</k> кладёт значение, <k>x == 5</k> спрашивает «равно ли?».</div>`,
+task:`<ul><li>Дано <k>temp = 22</k></li><li>Если температура больше 20 — выведи <k>Тепло!</k></li></ul>`,
+code:`temp = 22\n\n# добавь условие\n`,
+sol:`temp = 22\n\nif temp > 20:\n    print("Тепло!")\n`,
+tests:[
+  O('Вывод должен быть: Тепло!', 'Тепло!'),
+  C('Должна быть конструкция if с сравнением temp', /if\s+temp\s*>/),
+]},
+{ id:'m4-else', t:'else: вторая ветка', th:`
+<p><k>else</k> — «иначе»: код, который выполнится, когда условие ложно. Теперь у программы всегда два пути.</p>
+<c>age = 15
+if age >= 18:
+    print("Доступ разрешён")
+else:
+    print("Доступ закрыт")</c>
+<p><k>else</k> пишется на одном уровне с <k>if</k>, а его тело — тоже с отступом. Ровно одна из двух веток выполнится — никогда обе.</p>`,
+task:`<ul><li>Дано <k>age = 15</k></li><li>Если возраст 18 или больше — выведи <k>Доступ разрешён</k>, иначе — <k>Доступ закрыт</k></li></ul>`,
+code:`age = 15\n\n# проверь возраст и выведи результат\n`,
+sol:`age = 15\n\nif age >= 18:\n    print("Доступ разрешён")\nelse:\n    print("Доступ закрыт")\n`,
+tests:[
+  O('Вывод должен быть: Доступ закрыт', 'Доступ закрыт'),
+  C('В коде должна быть ветка else', /else\s*:/),
+]},
+{ id:'m4-elif', t:'elif: лестница условий', th:`
+<p>Когда путей больше двух, между <k>if</k> и <k>else</k> встраиваются <k>elif</k> («иначе если»). Python проверяет их сверху вниз и берёт <b>первый</b> подошедший — остальное пропускает.</p>
+<c>score = 85
+if score >= 90:
+    print("отлично")
+elif score >= 75:
+    print("хорошо")
+elif score >= 60:
+    print("удовлетворительно")
+else:
+    print("неудовлетворительно")</c>
+<div class="note">Порядок веток важен: если начать с <k>score >= 60</k>, то балл 85 застрянет там навсегда. От частного — к общему.</div>`,
+task:`<p>Дано <k>score = 85</k>. Шкала: 90+ — «отлично», 75–89 — «хорошо», 60–74 — «удовлетворительно», ниже — «неудовлетворительно».</p><ul><li>Напиши лестницу if / elif / else и выведи оценку словом</li></ul>`,
+code:`score = 85\n\n# построй лестницу условий\n`,
+sol:`score = 85\n\nif score >= 90:\n    print("отлично")\nelif score >= 75:\n    print("хорошо")\nelif score >= 60:\n    print("удовлетворительно")\nelse:\n    print("неудовлетворительно")\n`,
+tests:[
+  O('Вывод должен быть: хорошо', 'хорошо'),
+  C('Должна использоваться конструкция elif', /elif\s*:/),
+]},
+{ id:'m4-logic', t:'and, or, not: логика', th:`
+<p>Условия комбинируются логическими операторами: <k>and</k> — «и» (обе части истинны), <k>or</k> — «или» (хотя бы одна), <k>not</k> — «не» (переворачивает).</p>
+<c>age = 20
+has_pass = False
+if age >= 18 and has_pass:
+    print("Вход разрешён")</c>
+<ul><li><k>True and False</k> → <k>False</k></li><li><k>True or False</k> → <k>True</k></li><li><k>not True</k> → <k>False</k></li></ul>
+<p>Читается как обычное предложение: «если возраст 18+ <b>и</b> есть пропуск». Условия в Python пишутся почти как английский — Бэкус бы одобрил, а Гвидо — точно.</p>`,
+task:`<ul><li>Даны <k>age = 20</k> и <k>has_pass = False</k></li><li>Если возраст 18 или больше <b>и</b> есть пропуск — выведи <k>Вход разрешён</k>, иначе — <k>Вход запрещён</k></li></ul>`,
+code:`age = 20\nhas_pass = False\n\n# проверь оба условия\n`,
+sol:`age = 20\nhas_pass = False\n\nif age >= 18 and has_pass:\n    print("Вход разрешён")\nelse:\n    print("Вход запрещён")\n`,
+tests:[
+  O('Вывод должен быть: Вход запрещён', 'Вход запрещён'),
+  C('Используй оператор and', /\band\b/),
+]},
+{ id:'m4-match', t:'match-case: выбор по значению', th:`
+<p>Когда нужно сравнить одну переменную с набором конкретных значений, изящнее работает <k>match</k> (появился в Python 3.10):</p>
+<c>command = "старт"
+match command:
+    case "старт":
+        print("Погнали!")
+    case "стоп":
+        print("Останавливаюсь")
+    case _:
+        print("Неизвестная команда")</c>
+<p><k>case _</k> — ветка «всё остальное», аналог <k>else</k>. Это удобно для команд, меню, кодов состояния — везде, где значение принадлежит конечному набору.</p>`,
+task:`<p>Дано <k>command = "старт"</k>.</p><ul><li>Напиши match по <k>command</k>: «старт» → <k>Погнали!</k>, «стоп» → <k>Останавливаюсь</k>, остальное → <k>Неизвестная команда</k></li></ul>`,
+code:`command = "старт"\n\n# обработай команду через match\n`,
+sol:`command = "старт"\n\nmatch command:\n    case "старт":\n        print("Погнали!")\n    case "стоп":\n        print("Останавливаюсь")\n    case _:\n        print("Неизвестная команда")\n`,
+tests:[
+  O('Вывод должен быть: Погнали!', 'Погнали!'),
+  C('Используй конструкцию match', /match\s+command/),
+]},
+{ id:'m4-project', t:'Проект: високосный год', th:`
+<p>Год високосный, если он делится на 4, но не делится на 100 — либо всё-таки делится на 400. Да, отсчёт времени устроил Григорий XIII, а не программист.</p>
+<c>year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)</c>
+<p>Эта формула — идеальная тренировка логики: <k>and</k>, <k>or</k>, скобки и остатки в одном флаконе. Разбери её по кусочкам, прежде чем писать.</p>`,
+task:`<ul><li>Дано <k>year = 2024</k></li><li>Вычисли <k>is_leap</k> — True, если год високосный, иначе False</li><li>Выведи <k>2024 — високосный год</k>, если is_leap истинно (иначе — «2024 — невисокосный год»)</li></ul>`,
+code:`year = 2024\n\n# вычисли is_leap и выведи вердикт\n`,
+sol:`year = 2024\n\nis_leap = year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)\nif is_leap:\n    print(f"{year} — високосный год")\nelse:\n    print(f"{year} — невисокосный год")\n`,
+tests:[
+  P('is_leap должно быть равно True для 2024 года', 'assert is_leap is True, "для 2024 года is_leap должен быть True"'),
+  O('Вывод должен быть: 2024 — високосный год', '2024 — високосный год'),
+]},
+]},
+
+/* ============ 05. ЦИКЛЫ ============ */
+{ id:'m5', title:'Циклы', desc:'for, while, break, continue и FizzBuzz', lessons:[
+{ id:'m5-for', t:'for и range(): повторение', th:`
+<p>Цикл <k>for</k> повторяет блок кода. Классика — <k>range()</k>: <k>range(a, b)</k> даёт числа от <k>a</k> до <k>b-1</k> (правая граница не включается — как у срезов).</p>
+<c>for i in range(1, 6):
+    print(i)     # 1 2 3 4 5, каждое на своей строке</c>
+<p>Три аргумента — с шагом: <k>range(2, 11, 2)</k> — 2, 4, 6, 8, 10. Один аргумент — с нуля: <k>range(3)</k> — 0, 1, 2.</p>`,
+task:`<ul><li>Выведи числа от 1 до 5 (включительно), каждое на своей строке</li></ul>`,
+code:`# цикл от 1 до 5\n`,
+sol:`for i in range(1, 6):\n    print(i)\n`,
+tests:[
+  O('Вывод: пять строк — 1, 2, 3, 4, 5', '1\n2\n3\n4\n5'),
+  C('Используй цикл for', /for\s+\w+\s+in\s+range/),
+]},
+{ id:'m5-sum', t:'Накопление: сумма в цикле', th:`
+<p>Главный паттерн циклов — <b>накопитель</b>: переменная создаётся до цикла и растёт внутри него. Сумма чисел от 1 до 100:</p>
+<c>total = 0
+for i in range(1, 101):
+    total += i
+print(total)    # 5050</c>
+<p>Юная история вычислений: Гаусс сосчитал это в уме за секунды, складывая пары (1+100), (2+99)… Мы — честно, циклом: 100 итераций, зато по-нашему.</p>`,
+task:`<ul><li>Посчитай в переменную <k>total</k> сумму всех чисел от 1 до 100 с помощью цикла</li><li>Выведи результат</li></ul>`,
+code:`total = 0\n\n# просуммируй числа от 1 до 100\n`,
+sol:`total = 0\nfor i in range(1, 101):\n    total += i\nprint(total)\n`,
+tests:[
+  V('total должен быть равен 5050', 'total', '5050'),
+  O('Вывод должен быть: 5050', '5050'),
+  C('Суммируй через += внутри цикла', /total\s*\+=/),
+]},
+{ id:'m5-strloop', t:'Перебор строки', th:`
+<p>Строка сама по себе последовательность — цикл <k>for</k> проходит по её символам без всяких индексов:</p>
+<c>for ch in "Python":
+    print(ch)      # каждая буква на своей строке</c>
+<p>Внутри цикла работают условия — комбинируй: например, считай только гласные, только заглавные, только цифры.</p>
+<div class="note">Проверка «символ в наборе» пишется элегантно: <k>if ch in "аеиоуыэюя":</k></div>`,
+task:`<p>Дано <k>word = "программирование"</k>.</p><ul><li>Посчитай в переменную <k>count</k> количество гласных (аеиоуыэюя) в слове</li><li>Выведи <k>count</k> — должно получиться 7</li></ul>`,
+code:`word = "программирование"\ncount = 0\n\n# посчитай гласные\n`,
+sol:`word = "программирование"\ncount = 0\n\nfor ch in word:\n    if ch in "аеиоуыэюя":\n        count += 1\nprint(count)\n`,
+tests:[
+  V('count должен быть равен 7', 'count', '7'),
+  O('Вывод должен быть: 7', '7'),
+  C('Перебирай символы циклом for', /for\s+\w+\s+in\s+word/),
+]},
+{ id:'m5-while', t:'while: цикл с условием', th:`
+<p><k>while</k> повторяет тело, пока условие истинно. Количество повторений заранее неизвестно — цикл сам решит, когда остановиться.</p>
+<c>n = 5
+while n > 0:
+    print(n)
+    n -= 1
+print("Пуск!")</c>
+<p>Золотое правило while: что-то внутри тела должно менять проверяемую переменную. Иначе — <b>бесконечный цикл</b>: условие всегда истинно, программа никогда не заканчивается (у нас в редакторе сработает защита по таймауту, в жизни — Ctrl+C).</p>`,
+task:`<ul><li>Обратный отсчёт: переменная <k>n = 5</k>, цикл while печатает n и уменьшает её</li><li>После цикла (без отступа) выведи <k>Пуск!</k></li></ul>`,
+code:`n = 5\n\n# обратный отсчёт через while\n`,
+sol:`n = 5\nwhile n > 0:\n    print(n)\n    n -= 1\nprint("Пуск!")\n`,
+tests:[
+  O('Шесть строк: 5, 4, 3, 2, 1, Пуск!', '5\n4\n3\n2\n1\nПуск!'),
+  C('Используй цикл while', /while\s+/),
+]},
+{ id:'m5-break', t:'break и continue', th:`
+<p>Два руля внутри циклов: <k>break</k> — немедленно выйти из цикла совсем, <k>continue</k> — пропустить текущую итерацию и перейти к следующей.</p>
+<c>for i in range(1, 11):
+    if i % 3 == 0:
+        continue      # кратные трём — мимо
+    if i == 8:
+        break         # дошли до восьми — стоп
+    print(i)          # 1 2 4 5 7</c>
+<p><k>continue</k> — «эта не считаем», <k>break</k> — «всё, сворачиваем». Их любят в фильтрах, поисках и проверках ввода.</p>`,
+task:`<ul><li>Перебирай числа от 1 до 10</li><li>Пропускай кратные трём (continue)</li><li>Полностью останови цикл на числе 8 (break), не печатая его</li><li>Печатай остальные числа</li></ul>`,
+code:`# цикл с continue и break\n`,
+sol:`for i in range(1, 11):\n    if i % 3 == 0:\n        continue\n    if i == 8:\n        break\n    print(i)\n`,
+tests:[
+  O('Вывод должен быть: 1, 2, 4, 5, 7 — построчно', '1\n2\n4\n5\n7'),
+  C('Используй break', /break/),
+  C('Используй continue', /continue/),
+]},
+{ id:'m5-nested', t:'Вложенные циклы', th:`
+<p>Цикл внутри цикла: внешний идёт по строкам, внутренний — по колонкам. Каждый проход внешнего полностью прокручивает внутренний.</p>
+<c>for i in range(1, 6):
+    print("*" * i)</c>
+<p>А для прямоугольной сетки нужен честный двойной цикл: <k>for строка: for колонка:</k>. Вложенные циклы — фундамент таблиц, матриц и пиксельных игр.</p>`,
+task:`<ul><li>Выведи лестницу из звёздочек: 5 строк, в строке номер <k>i</k> — <k>i</k> звёздочек (используй <k>"*" * i</k> в цикле)</li></ul>`,
+code:`# треугольник из звёздочек\n`,
+sol:`for i in range(1, 6):\n    print("*" * i)\n`,
+tests:[
+  O('Пять строк: *, **, ***, ****, *****', '*\n**\n***\n****\n*****'),
+]},
+{ id:'m5-fizz', t:'Проект: FizzBuzz', th:`
+<p>Легендарное интервью-задание, на котором спотыкается половина мира. Правила: числа от 1 до 15; кратное 3 → <k>Fizz</k>; кратное 5 → <k>Buzz</k>; кратное обоим (15) → <k>FizzBuzz</k>; иначе — само число.</p>
+<c>for i in range(1, 16):
+    if i % 15 == 0:
+        print("FizzBuzz")</c>
+<div class="note">Проверяй делимость на 15 <b>первой</b> — иначе до неё очередь никогда не дойдёт: 15 кратно и 3, и 5, и застрянет в ранней ветке.</div>`,
+task:`<ul><li>Выведи FizzBuzz для чисел от 1 до 15 по правилам выше, каждое на своей строке</li></ul>`,
+code:`# классика жанра\n`,
+sol:`for i in range(1, 16):\n    if i % 15 == 0:\n        print("FizzBuzz")\n    elif i % 3 == 0:\n        print("Fizz")\n    elif i % 5 == 0:\n        print("Buzz")\n    else:\n        print(i)\n`,
+tests:[
+  O('Вывод — 15 строк по правилам FizzBuzz', '1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz'),
+  C('Используй оператор остатка %', /%/),
+]},
+]},
+
+/* ============ 06. СПИСКИ ============ */
+{ id:'m6', title:'Списки', desc:'Коллекции, методы, enumerate и матрицы', lessons:[
+{ id:'m6-basic', t:'Списки: создание и доступ', th:`
+<p>Список — упорядоченная коллекция чего угодно: числа, строки, другие списки. Элементы нумеруются с нуля, работают индексы, срезы и <k>len()</k> — всё как у строк.</p>
+<c>fruits = ["яблоко", "банан", "вишня"]
+fruits[0]      # 'яблоко'
+fruits[-1]     # 'вишня'
+len(fruits)    # 3</c>
+<p>Списки <b>изменяемы</b> — в отличие от строк: можно заменить элемент по индексу — <k>fruits[1] = "груша"</k>.</p>`,
+task:`<p>Дано <k>fruits = ["яблоко", "банан", "вишня"]</k>.</p><ul><li>Выведи первый и последний элемент одной командой через запятую: <k>print(fruits[0], fruits[-1])</k></li><li>Выведи длину списка</li></ul>`,
+code:`fruits = ["яблоко", "банан", "вишня"]\n\n# выведи первый, последний и длину\n`,
+sol:`fruits = ["яблоко", "банан", "вишня"]\n\nprint(fruits[0], fruits[-1])\nprint(len(fruits))\n`,
+tests:[
+  O('Две строки: «яблоко вишня» и «3»', 'яблоко вишня\n3'),
+  C('Используй len() для списка', /len\s*\(\s*fruits/),
+]},
+{ id:'m6-methods', t:'Изменение списков: методы', th:`
+<p>Списки живут и меняются: <k>append(x)</k> добавляет в конец, <k>insert(i, x)</k> — по позиции, <k>remove(x)</k> удаляет первое вхождение значения, <k>pop()</k> вынимает последний элемент.</p>
+<c>tasks = ["учить Python"]
+tasks.append("гулять")      # в конец
+tasks.remove("гулять")      # убрать значение</c>
+<div class="note">Методы списков меняют список «на месте» и ничего не возвращают. <k>tasks.append("x")</k> работает, а <k>tasks = tasks.append("x")</k> — сломает переменную (append вернул None).</div>`,
+task:`<p>Дано <k>tasks = ["сдать Python-проект", "купить корм коту"]</k>.</p><ul><li>Добавь задачу <k>позвонить маме</k> в конец</li><li>Удали задачу <k>купить корм коту</k></li><li>Выведи итоговый список</li></ul>`,
+code:`tasks = ["сдать Python-проект", "купить корм коту"]\n\n# обнови список и выведи его\n`,
+sol:`tasks = ["сдать Python-проект", "купить корм коту"]\n\ntasks.append("позвонить маме")\ntasks.remove("купить корм коту")\nprint(tasks)\n`,
+tests:[
+  P('tasks должен стать равен ["сдать Python-проект", "позвонить маме"]', 'assert tasks == ["сдать Python-проект", "позвонить маме"], "после изменений в tasks должны остаться две задачи"'),
+  C('Используй метод .append()', /\.append\s*\(/),
+  C('Используй .remove() или .pop() для удаления', /\.(remove|pop)\s*\(/),
+]},
+{ id:'m6-slices', t:'Срезы списков и оператор in', th:`
+<p>Срезы списков работают как у строк: <k>nums[:3]</k> — первые три, <k>nums[-2:]</k> — последние два. Результат — <b>новый</b> список, оригинал не трогается.</p>
+<p>Проверка «есть ли элемент» — оператор <k>in</k>:</p>
+<c>nums = [4, 8, 15, 16, 23]
+15 in nums        # True
+42 in nums        # False</c>
+<p><k>in</k> возвращает булево значение — его можно сразу сохранить в переменную или использовать в if.</p>`,
+task:`<p>Дано <k>numbers = [3, 7, 11, 42, 8, 5, 19]</k>.</p><ul><li>Запиши в <k>first_three</k> первые три элемента срезом</li><li>Запиши в <k>has_ten</k> результат проверки <k>10 in numbers</k></li></ul>`,
+code:`numbers = [3, 7, 11, 42, 8, 5, 19]\n\n# срез и проверка in\n`,
+sol:`numbers = [3, 7, 11, 42, 8, 5, 19]\n\nfirst_three = numbers[:3]\nhas_ten = 10 in numbers\n`,
+tests:[
+  P('first_three должен быть равен [3, 7, 11]', 'assert first_three == [3, 7, 11], "first_three должен содержать первые три элемента"'),
+  P('has_ten должен быть равен False', 'assert has_ten is False, "в списке numbers нет десятки — has_ten должен быть False"'),
+]},
+{ id:'m6-enumerate', t:'enumerate: индекс + элемент', th:`
+<p>Перебирать список просто: <k>for fruit in fruits:</k>. Но часто нужен и номер. <k>enumerate()</k> выдаёт пары «номер, элемент» — и не нужно считать вручную.</p>
+<c>fruits = ["яблоко", "банан", "вишня"]
+for i, fruit in enumerate(fruits, 1):
+    print(f"{i}. {fruit}")</c>
+<p>Второй аргумент <k>1</k> — стартовый номер (по умолчанию 0). Распаковка пары в <k>i, fruit</k> — тот же приём, что и с кортежами.</p>`,
+task:`<p>Дано <k>fruits = ["яблоко", "банан", "вишня"]</k>.</p><ul><li>Перебери список с <k>enumerate(fruits, 1)</k></li><li>Выведи нумерованный список: <k>1. яблоко</k>, <k>2. банан</k>, <k>3. вишня</k> — каждую строку с новой строки</li></ul>`,
+code:`fruits = ["яблоко", "банан", "вишня"]\n\n# нумерованный вывод через enumerate\n`,
+sol:`fruits = ["яблоко", "банан", "вишня"]\n\nfor i, fruit in enumerate(fruits, 1):\n    print(f"{i}. {fruit}")\n`,
+tests:[
+  O('Три строки: «1. яблоко», «2. банан», «3. вишня»', '1. яблоко\n2. банан\n3. вишня'),
+  C('Используй enumerate()', /enumerate\s*\(/),
+]},
+{ id:'m6-stats', t:'Статистика: sum, min, max', th:`
+<p>Python из коробки умеет в статистику: <k>sum()</k> — сумма, <k>min()</k> и <k>max()</k> — крайние значения, <k>len()</k> — количество. Среднее — не встроено, но выводится в одну строку:</p>
+<c>grades = [78, 92, 85, 67, 90]
+average = sum(grades) / len(grades)   # 82.4</c>
+<p>Для аккуратности результат округляют: <k>round(average, 1)</k>. Так пишется первый этап любого анализа данных.</p>`,
+task:`<p>Дано <k>grades = [78, 92, 85, 67, 90]</k> — оценки за неделю.</p><ul><li>Посчитай <k>total</k> — сумму оценок</li><li>Посчитай <k>average</k> — среднее, округлённое до 1 знака (82.4)</li><li>Выведи строку <k>Средний балл: 82.4</k></li></ul>`,
+code:`grades = [78, 92, 85, 67, 90]\n\n# посчитай total и average, выведи средний\n`,
+sol:`grades = [78, 92, 85, 67, 90]\n\ntotal = sum(grades)\naverage = round(sum(grades) / len(grades), 1)\nprint(f"Средний балл: {average}")\n`,
+tests:[
+  V('total должен быть равен 412', 'total', '412'),
+  P('average должен быть примерно равен 82.4', 'assert abs(average - 82.4) < 0.01, "average — это сумма, делённая на количество, округлённая до 82.4"'),
+  O('Вывод должен быть: Средний балл: 82.4', 'Средний балл: 82.4'),
+]},
+{ id:'m6-matrix', t:'Проект: суммы строк матрицы', th:`
+<p>Список списков — это таблица (матрица): внешний список — строки, внутренние — колонки. Доступ: <k>matrix[1][2]</k> — третья ячейка второй строки.</p>
+<c>matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+]</c>
+<p>Перебор по строкам — внешний цикл; внутри каждая строка — обычный список, и <k>sum(row)</k> легко даёт сумму.</p>`,
+task:`<p>Дана матрица 3×3 (см. код). </p><ul><li>Собери в <k>row_sums</k> сумму каждой строки (получится [6, 15, 24])</li><li>Выведи <k>row_sums</k></li></ul>`,
+code:`matrix = [\n    [1, 2, 3],\n    [4, 5, 6],\n    [7, 8, 9],\n]\n\n# собери суммы строк в row_sums\n`,
+sol:`matrix = [\n    [1, 2, 3],\n    [4, 5, 6],\n    [7, 8, 9],\n]\n\nrow_sums = []\nfor row in matrix:\n    row_sums.append(sum(row))\nprint(row_sums)\n`,
+tests:[
+  P('row_sums должен быть равен [6, 15, 24]', 'assert row_sums == [6, 15, 24], "суммы строк: 6, 15 и 24"'),
+  O('Вывод должен быть: [6, 15, 24]', '[6, 15, 24]'),
+]},
+]},
+
+/* ============ 07. КОРТЕЖИ, МНОЖЕСТВА, СЛОВАРИ ============ */
+{ id:'m7', title:'Кортежи, множества, словари', desc:'Остальные коллекции Python и частотный анализ', lessons:[
+{ id:'m7-tuple', t:'Кортежи: неизменяемые пары', th:`
+<p>Кортеж — список, который нельзя изменить: создаётся скобками и навсегда застывает. Идеален для записей фиксированной формы: координаты, размеры, дата.</p>
+<c>size = (1920, 1080)
+width, height = size     # распаковка в две переменные</c>
+<p><b>Распаковка</b> — фирменный приём: элементы кортежа разлетаются по переменным одной строкой. Обмен значений без буферной переменной — тоже он: <k>a, b = b, a</k>.</p>`,
+task:`<p>Дано <k>size = (1920, 1080)</k> — разрешение экрана.</p><ul><li>Распакуй кортеж в переменные <k>width</k> и <k>height</k></li><li>Выведи их одной командой: <k>print(width, height)</k></li></ul>`,
+code:`size = (1920, 1080)\n\n# распакуй и выведи\n`,
+sol:`size = (1920, 1080)\n\nwidth, height = size\nprint(width, height)\n`,
+tests:[
+  P('width должен быть равен 1920', 'assert width == 1920, "width должен получить первый элемент кортежа"'),
+  P('height должен быть равен 1080', 'assert height == 1080, "height должен получить второй элемент кортежа"'),
+  O('Вывод должен быть: 1920 1080', '1920 1080'),
+]},
+{ id:'m7-set', t:'Множества: уникальные значения', th:`
+<p>Множество (<k>set</k>) — коллекция без повторов и без порядка. Создаётся фигурными скобками или из любого списка: дубликаты исчезают мгновенно.</p>
+<c>votes = [4, 7, 4, 2, 7, 9, 4]
+unique = set(votes)     # {2, 4, 7, 9}</c>
+<p>Методы <k>add()</k>, <k>discard()</k> меняют множество; операции <k>& | -</k> дают пересечение, объединение и разность. Лайфхак «убрать повторы» — <k>set(список)</k>.</p>
+<div class="note">Пустое множество создаётся <k>set()</k>, а не <k>{}</k> — пустые фигурные скобки создают словарь.</div>`,
+task:`<p>Дано <k>votes = [4, 7, 4, 2, 7, 9, 4]</k> — голоса зрителей.</p><ul><li>Запиши в <k>unique</k> множество уникальных голосов</li><li>Выведи <k>len(unique)</k> и <k>sorted(unique)</k> одной командой: <k>print(len(unique), sorted(unique))</k></li></ul>`,
+code:`votes = [4, 7, 4, 2, 7, 9, 4]\n\n# множество уникальных значений и вывод\n`,
+sol:`votes = [4, 7, 4, 2, 7, 9, 4]\n\nunique = set(votes)\nprint(len(unique), sorted(unique))\n`,
+tests:[
+  P('unique должен быть множеством {2, 4, 7, 9}', 'assert unique == {2, 4, 7, 9}, "в множестве должны остаться уникальные значения: 2, 4, 7, 9"'),
+  O('Вывод должен быть: 4 [2, 4, 7, 9]', '4 [2, 4, 7, 9]'),
+]},
+{ id:'m7-dict', t:'Словари: данные по ключу', th:`
+<p>Словарь хранит пары «ключ → значение» и выдаёт значение мгновенно по ключу. Это самая человеческая структура данных в Python — как карточки в картотеке.</p>
+<c>person = {
+    "имя": "Гвидо",
+    "страна": "Нидерланды",
+    "год": 1956,
+}
+person["имя"]            # "Гвидо"
+person["язык"] = "Python"   # добавить ключ</c>
+<p>Ключи — обычно строки или числа, значения — что угодно. Доступ по несуществующему ключу без подготовки даст KeyError — об этом следующий урок.</p>`,
+task:`<ul><li>Создай словарь <k>person</k> с ключами <k>"имя"</k> (значение <k>"Гвидо"</k>), <k>"страна"</k> (<k>"Нидерланды"</k>), <k>"год"</k> (1956)</li><li>Выведи значение по ключу <k>"имя"</k></li><li>Добавь ключ <k>"язык"</k> со значением <k>"Python"</k></li></ul>`,
+code:`# создай person, выведи имя и добавь ключ "язык"\n`,
+sol:`person = {"имя": "Гвидо", "страна": "Нидерланды", "год": 1956}\nprint(person["имя"])\nperson["язык"] = "Python"\n`,
+tests:[
+  P('person["имя"] должен быть равен "Гвидо"', 'assert person["имя"] == "Гвидо", "ключ \\"имя\\" должен вести к \\"Гвидо\\""'),
+  P('person["страна"] должен быть равен "Нидерланды"', 'assert person["страна"] == "Нидерланды", "ключ \\"страна\\" должен вести к \\"Нидерланды\\""'),
+  P('person["год"] должен быть равен 1956', 'assert person["год"] == 1956, "ключ \\"год\\" должен вести к 1956"'),
+  P('После добавления person["язык"] должен быть равен "Python"', 'assert person["язык"] == "Python", "добавь ключ \\"язык\\" со значением \\"Python\\""'),
+  H('В выводе должно быть имя Гвидо', /Гвидо/),
+]},
+{ id:'m7-items', t:'Перебор словаря: items()', th:`
+<p>Пройтись по всему словарю сразу — метод <k>items()</k>: выдаёт пары «ключ, значение», которые распаковываются прямо в цикле.</p>
+<c>prices = {"кофе": 120, "чай": 80, "какао": 95}
+for name, price in prices.items():
+    print(f"{name} — {price} ₽")</c>
+<p>Ещё полезны <k>keys()</k> (только ключи) и <k>values()</k> (только значения). Словари в Python 3.7+ помнят порядок вставки — вывод идёт в порядке добавления.</p>`,
+task:`<p>Дано <k>prices = {"кофе": 120, "чай": 80, "какао": 95}</k>.</p><ul><li>Перебери словарь через <k>.items()</k></li><li>Выведи каждую пару в формате <k>кофе — 120 ₽</k> (символ ₽ — рубль)</li></ul>`,
+code:`prices = {"кофе": 120, "чай": 80, "какао": 95}\n\n# меню с ценами\n`,
+sol:`prices = {"кофе": 120, "чай": 80, "какао": 95}\n\nfor name, price in prices.items():\n    print(f"{name} — {price} ₽")\n`,
+tests:[
+  O('Три строки: «кофе — 120 ₽», «чай — 80 ₽», «какао — 95 ₽»', 'кофе — 120 ₽\nчай — 80 ₽\nкакао — 95 ₽'),
+  C('Используй метод .items()', /\.items\s*\(\)/),
+]},
+{ id:'m7-get', t:'get() и in: безопасный доступ', th:`
+<p><k>person["рост"]</k> при отсутствии ключа взорвётся KeyError. Аккуратный вариант — <k>get()</k>: вернёт <k>None</k> или запасное значение вторым аргументом.</p>
+<c>contacts = {"Аня": "+7 912 ..."}
+contacts.get("Борис")           # None
+contacts.get("Борис", "нет")    # "нет"</c>
+<p>А оператор <k>in</k> проверяет наличие ключа: <k>"Аня" in contacts</k> → True. Вместе get и in покрывают все «осторожные» сценарии работы со словарём.</p>`,
+task:`<p>Дано <k>contacts = {"Аня": "+7 111", "Валя": "+7 222"}</k>.</p><ul><li>Запиши в <k>phone</k> результат <k>contacts.get("Борис", "не найден")</k></li><li>Запиши в <k>is_there</k> результат проверки <k>"Аня" in contacts</k></li><li>Выведи <k>phone</k></li></ul>`,
+code:`contacts = {"Аня": "+7 111", "Валя": "+7 222"}\n\n# безопасный поиск контакта\n`,
+sol:`contacts = {"Аня": "+7 111", "Валя": "+7 222"}\n\nphone = contacts.get("Борис", "не найден")\nis_there = "Аня" in contacts\nprint(phone)\n`,
+tests:[
+  P('phone должен быть равен "не найден"', 'assert phone == "не найден", "get() должен вернуть запасное значение — Бориса в словаре нет"'),
+  P('is_there должен быть равен True', 'assert is_there is True, "Аня есть в словаре — in должен вернуть True"'),
+  O('Вывод должен быть: не найден', 'не найден'),
+  C('Используй метод .get()', /\.get\s*\(/),
+]},
+{ id:'m7-project', t:'Проект: частотный анализ', th:`
+<p>Считать, сколько раз встречается каждый элемент — одна из базовых задач анализа. Паттерн «словарь-счётчик»:</p>
+<c>counts = {}
+for ch in text:
+    counts[ch] = counts.get(ch, 0) + 1</c>
+<p><k>counts.get(ch, 0)</k> возвращает текущий счёт или ноль, если буква встретилась впервые. Этот паттерн работает с буквами, словами, IP-адресами, товарами в корзине — чем угодно.</p>`,
+task:`<p>Дано <k>text = "абракадабра"</k>.</p><ul><li>Посчитай в <k>counts</k> частоту каждой буквы (словарём, циклом и <k>.get()</k>)</li><li>Выведи <k>counts</k></li></ul>`,
+code:`text = "абракадабра"\ncounts = {}\n\n# посчитай частоты букв\n`,
+sol:`text = "абракадабра"\ncounts = {}\n\nfor ch in text:\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts)\n`,
+tests:[
+  P('counts должен быть равен {"а": 5, "б": 2, "р": 2, "к": 1, "д": 1}', 'assert counts == {"а": 5, "б": 2, "р": 2, "к": 1, "д": 1}, "частоты: а-5, б-2, р-2, к-1, д-1"'),
+  H('В выводе должна быть запись \'а\': 5', /'а':\s*5/),
+]},
+]},
+
+/* ============ 08. ФУНКЦИИ ============ */
+{ id:'m8', title:'Функции', desc:'def, return, аргументы, области видимости и lambda', lessons:[
+{ id:'m8-def', t:'def: свои команды', th:`
+<p>Функция — блок кода с именем. Объявляется <k>def</k>, вызывается по имени со скобками. Написал раз — вызываешь сколько угодно.</p>
+<c>def greet():
+    print("Привет из функции!")
+
+greet()    # Привет из функции!
+greet()    # и ещё раз</c>
+<p>Тело функции — с отступом. Вызов без скобок ничего не делает — <k>greet</k> это просто ссылка на объект-функцию. Сила функций: код пишется один раз, а имена живут в словаре программы.</p>`,
+task:`<ul><li>Объяви функцию <k>greet()</k>, которая печатает <k>Привет из функции!</k></li><li>Вызови её дважды</li></ul>`,
+code:`# объяви greet и вызови дважды\n`,
+sol:`def greet():\n    print("Привет из функции!")\n\ngreet()\ngreet()\n`,
+tests:[
+  O('Две строки вывода: Привет из функции!', 'Привет из функции!\nПривет из функции!'),
+  C('Объяви функцию def greet():', /def\s+greet\s*\(\s*\)/),
+]},
+{ id:'m8-params', t:'Параметры: функции с данными', th:`
+<p>Параметры — переменные в скобках при объявлении. При вызове в них попадают аргументы, и функция обрабатывает уже конкретные данные.</p>
+<c>def greet(name):
+    print(f"Привет, {name}!")
+
+greet("Аня")      # Привет, Аня!</c>
+<p>Параметров может быть несколько через запятую. Функция + параметры = конвейер: одна форма, бесконечное множество заготовок.</p>`,
+task:`<ul><li>Объяви функцию <k>greet(name)</k>, печатающую <k>Привет, {имя}!</k> (с восклицательным знаком)</li><li>Вызови её с аргументом <k>"Аня"</k></li></ul>`,
+code:`# функция с параметром name\n`,
+sol:`def greet(name):\n    print(f"Привет, {name}!")\n\ngreet("Аня")\n`,
+tests:[
+  O('Вывод должен быть: Привет, Аня!', 'Привет, Аня!'),
+  P('Функция greet должна работать с любым именем', 'import io, contextlib\n_b = io.StringIO()\nwith contextlib.redirect_stdout(_b):\n    greet("Борис")\nassert _b.getvalue().strip() == "Привет, Борис!", "greet(\\"Борис\\") должна печатать \\"Привет, Борис!\\""'),
+]},
+{ id:'m8-return', t:'return: результат функции', th:`
+<p><k>print</k> просто показывает — а <k>return</k> <b>возвращает</b> значение обратно в программу. Возвращённое можно сохранить, сложить, передать дальше. Это разница между «сказать» и «отдать».</p>
+<c>def add(a, b):
+    return a + b
+
+result = add(2, 3)   # 5
+add(add(1, 2), 3)    # 6 — функции вкладываются друг в друга</c>
+<p>Return завершает функцию немедленно. Без него функция неявно возвращает <k>None</k>.</p>`,
+task:`<ul><li>Напиши функцию <k>add(a, b)</k>, возвращающую сумму</li><li>Вызови <k>add(2, 3)</k> и выведи результат</li></ul>`,
+code:`# функция add с return\n`,
+sol:`def add(a, b):\n    return a + b\n\nprint(add(2, 3))\n`,
+tests:[
+  P('add(2, 3) должен возвращать 5', 'assert add(2, 3) == 5, "add(2, 3) должен вернуть 5"'),
+  P('add(-1, 1) должен возвращать 0', 'assert add(-1, 1) == 0, "add(-1, 1) должен вернуть 0"'),
+  P('add(0, 0) должен возвращать 0', 'assert add(0, 0) == 0, "add(0, 0) должен вернуть 0"'),
+  C('Используй return', /return/),
+]},
+{ id:'m8-default', t:'Значения по умолчанию', th:`
+<p>Параметр может иметь запасное значение — тогда его можно не передавать:</p>
+<c>def power(base, exp=2):
+    return base ** exp
+
+power(5)        # 25 — exp взял двойку
+power(2, 10)    # 1024 — явный аргумент</c>
+<p>Дефолтные параметры позволяют вызвать одну функцию и кратко, и подробно. Правило стиля: обязательные параметры — слева, необязательные — справа.</p>`,
+task:`<ul><li>Напиши функцию <k>power(base, exp=2)</k>, возвращающую <k>base</k> в степени <k>exp</k></li><li>Выведи <k>power(5)</k> и <k>power(2, 10)</k></li></ul>`,
+code:`# power с дефолтной степенью\n`,
+sol:`def power(base, exp=2):\n    return base ** exp\n\nprint(power(5))\nprint(power(2, 10))\n`,
+tests:[
+  P('power(5) должен возвращать 25', 'assert power(5) == 25, "без второго аргумента exp = 2, значит power(5) — это 25"'),
+  P('power(2, 10) должен возвращать 1024', 'assert power(2, 10) == 1024, "power(2, 10) должен вернуть 1024"'),
+  P('power(7, 1) должен возвращать 7', 'assert power(7, 1) == 7, "power(7, 1) должен вернуть 7"'),
+]},
+{ id:'m8-args', t:'*args и **kwargs', th:`
+<p>Функция может принять <b>сколько угодно</b> аргументов. <k>*args</k> собирает лишние позиционные аргументы в кортеж, <k>**kwargs</k> — именованные в словарь.</p>
+<c>def summarize(*numbers):
+    return sum(numbers)
+
+summarize(1, 2, 3)          # 6
+summarize(10, 20, 30, 40)   # 100</c>
+<c>def make_profile(**data):
+    return data
+
+make_profile(name="Гвидо")   # {"name": "Гвидо"}</c>
+<p>Звёздочка — «собери всё, что дали». Так устроены <k>print()</k> и тысячи библиотечных функций.</p>`,
+task:`<ul><li>Напиши функцию <k>summarize(*numbers)</k>, возвращающую сумму всех переданных чисел</li><li>Напиши функцию <k>make_profile(**data)</k>, возвращающую словарь данных</li><li>Создай <k>profile = make_profile(name="Гвидо", age=37)</k></li></ul>`,
+code:`# summarize и make_profile\n`,
+sol:`def summarize(*numbers):\n    return sum(numbers)\n\ndef make_profile(**data):\n    return data\n\nprofile = make_profile(name="Гвидо", age=37)\n`,
+tests:[
+  P('summarize(1, 2, 3) должен возвращать 6', 'assert summarize(1, 2, 3) == 6, "summarize(1, 2, 3) должен вернуть 6"'),
+  P('summarize() без аргументов должен возвращать 0', 'assert summarize() == 0, "sum(пусто) — это 0"'),
+  P('summarize(10, 20, 30, 40) должен возвращать 100', 'assert summarize(10, 20, 30, 40) == 100, "summarize(10, 20, 30, 40) должен вернуть 100"'),
+  P('profile должен быть равен {"name": "Гвидо", "age": 37}', 'assert profile == {"name": "Гвидо", "age": 37}, "make_profile должен собрать словарь из именованных аргументов"'),
+]},
+{ id:'m8-scope', t:'Область видимости', th:`
+<p>Переменные внутри функции — <b>локальные</b>: живут только в ней и снаружи невидимы. Изменить глобальную переменную из функции можно, явно объявив её: <k>global</k>.</p>
+<c>counter = 0
+
+def increment():
+    global counter
+    counter += 1</c>
+<p>Без <k>global</k> присваивание создало бы новую локальную переменную с тем же именем — классический источник недоразумений. Глобальными переменными увлекаться не стоит, но понять механику — обязательно.</p>`,
+task:`<ul><li>Создай глобальную переменную <k>counter = 0</k></li><li>Напиши функцию <k>increment()</k>, которая через <k>global</k> увеличивает counter на 1</li><li>Вызови её три раза и выведи counter</li></ul>`,
+code:`counter = 0\n\n# функция с global и три вызова\n`,
+sol:`counter = 0\n\ndef increment():\n    global counter\n    counter += 1\n\nincrement()\nincrement()\nincrement()\nprint(counter)\n`,
+tests:[
+  P('counter должен быть равен 3 после трёх вызовов', 'assert counter == 3, "после трёх increment() счётчик должен стать 3"'),
+  O('Вывод должен быть: 3', '3'),
+  C('Используй global внутри функции', /global\s+counter/),
+]},
+{ id:'m8-lambda', t:'lambda, sorted(key=), map, filter', th:`
+<p>Лямбда — функция без имени, в одну строку: <k>lambda аргументы: выражение</k>. Живёт там, где функция нужна «на один раз» — чаще всего как <k>key</k> для сортировки.</p>
+<c>words = ["банан", "ай", "вишня"]
+sorted(words, key=len)         # по длине
+sorted(words, key=lambda w: w[-1])   # по последней букве</c>
+<p>Соседи по цеху: <k>map(функция, список)</k> применяет функцию к каждому элементу, <k>filter(функция, список)</k> отбирает те, где функция вернула True. Оба возвращают итераторы — оборачивай в <k>list()</k>.</p>`,
+task:`<p>Даны <k>words = ["банан", "ай", "вишня"]</k> и <k>nums = [1, 2, 3, 4, 5, 6]</k>.</p><ul><li>Запиши в <k>by_len</k> слова, отсортированные по длине (<k>sorted</k> с <k>key=len</k>)</li><li>Запиши в <k>evens</k> чётные числа через <k>filter</k> и <k>lambda</k></li></ul>`,
+code:`words = ["банан", "ай", "вишня"]\nnums = [1, 2, 3, 4, 5, 6]\n\n# by_len и evens\n`,
+sol:`words = ["банан", "ай", "вишня"]\nnums = [1, 2, 3, 4, 5, 6]\n\nby_len = sorted(words, key=len)\nevens = list(filter(lambda x: x % 2 == 0, nums))\n`,
+tests:[
+  P('by_len должен быть равен ["ай", "банан", "вишня"]', 'assert by_len == ["ай", "банан", "вишня"], "сортировка по длине: ай (2), потом банан и вишня (по 5)"'),
+  P('evens должен быть равен [2, 4, 6]', 'assert evens == [2, 4, 6], "в evens должны попасть чётные: 2, 4, 6"'),
+  C('Используй lambda', /lambda/),
+]},
+{ id:'m8-prime', t:'Проект: функция is_prime', th:`
+<p>Проверка простоты — «hello world» мира алгоритмов. Число простое, если делится только на 1 и себя. Хватит проверять делители до корня из числа: если до корня ничего не нашлось, дальше и не найдётся.</p>
+<c>def is_prime(n):
+    if n < 2:
+        return False
+    for d in range(2, int(n ** 0.5) + 1):
+        if n % d == 0:
+            return False
+    return True</c>
+<p>Ранний <k>return False</k> при первом найденном делителе — приём «выход при опровержении»: нечего крутить цикл дальше.</p>`,
+task:`<ul><li>Напиши функцию <k>is_prime(n)</k>, возвращающую True для простых чисел и False для составных</li><li>Учти: 0 и 1 — не простые, а 2 — простое</li></ul>`,
+code:`def is_prime(n):\n    # твоё решение\n    pass\n`,
+sol:`def is_prime(n):\n    if n < 2:\n        return False\n    for d in range(2, int(n ** 0.5) + 1):\n        if n % d == 0:\n            return False\n    return True\n`,
+tests:[
+  P('is_prime(7) должен возвращать True', 'assert is_prime(7) is True, "7 — простое число"'),
+  P('is_prime(9) должен возвращать False', 'assert is_prime(9) is False, "9 = 3×3 — составное"'),
+  P('is_prime(2) должен возвращать True', 'assert is_prime(2) is True, "2 — наименьшее простое число"'),
+  P('is_prime(1) должен возвращать False', 'assert is_prime(1) is False, "1 не считается простым"'),
+  P('is_prime(97) должен возвращать True', 'assert is_prime(97) is True, "97 — простое число"'),
+]},
+]},
+
+/* ============ 09. COMPREHENSIONS И ГЕНЕРАТОРЫ ============ */
+{ id:'m9', title:'Comprehensions и генераторы', desc:'Списочные включения и ленивые вычисления', lessons:[
+{ id:'m9-list', t:'List comprehension', th:`
+<p>Списочное включение строит список одной строкой: «для каждого x в источнике — взять выражение».</p>
+<c>squares = [x ** 2 for x in range(1, 11)]
+# [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]</c>
+<p>Читается почти по-английски: «квадраты иксов для иксов от 1 до 10». То, что раньше занило цикл из четырёх строк, теперь — одна. В мере, разумеется: сложное лучше разворачивать обратно в цикл.</p>`,
+task:`<ul><li>Собери в <k>squares</k> квадраты чисел от 1 до 10 через list comprehension</li><li>Выведи <k>squares</k></li></ul>`,
+code:`# квадраты от 1 до 10 одним выражением\n`,
+sol:`squares = [x ** 2 for x in range(1, 11)]\nprint(squares)\n`,
+tests:[
+  P('squares должен быть равен [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]', 'assert squares == [1, 4, 9, 16, 25, 36, 49, 64, 81, 100], "квадраты чисел от 1 до 10"'),
+  C('Используй list comprehension [ … for … in … ]', /\[[^\]]*for[^\]]*in[^\]]*\]/),
+]},
+{ id:'m9-filter', t:'Условие в comprehension', th:`
+<p>Включение умеет и фильтровать: добавь <k>if</k> в конец — и в список попадут только подходящие элементы.</p>
+<c>evens = [x for x in range(1, 21) if x % 2 == 0]
+long_words = [w for w in words if len(w) > 3]</c>
+<p>Формула: <k>[выражение for элемент in источник if условие]</k>. Прочитай: «взять то-то, из того-то, где то-то». Комбинация map+filter из прошлого модуля — в одном выражении.</p>`,
+task:`<p>Дано <k>nums = range(1, 21)</k> и <k>words = ["Python", "JS", "Kotlin", "Go", "Haskell"]</k>.</p><ul><li>Собери в <k>evens</k> чётные числа от 1 до 20 включительно</li><li>Собери в <k>long_words</k> слова длиннее 3 символов</li></ul>`,
+code:`nums = range(1, 21)\nwords = ["Python", "JS", "Kotlin", "Go", "Haskell"]\n\n# evens и long_words\n`,
+sol:`nums = range(1, 21)\nwords = ["Python", "JS", "Kotlin", "Go", "Haskell"]\n\nevens = [x for x in nums if x % 2 == 0]\nlong_words = [w for w in words if len(w) > 3]\n`,
+tests:[
+  P('evens должен содержать [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]', 'assert evens == [2, 4, 6, 8, 10, 12, 14, 16, 18, 20], "в evens — чётные числа от 1 до 20"'),
+  P('long_words должен быть равен ["Python", "Kotlin", "Haskell"]', 'assert long_words == ["Python", "Kotlin", "Haskell"], "в long_words — слова длиннее 3 символов"'),
+]},
+{ id:'m9-dictset', t:'Dict и set comprehension', th:`
+<p>Включения работают и для словарей (фигурные скобки + двоеточие), и для множеств (фигурные скобки без двоеточия):</p>
+<c>lengths = {w: len(w) for w in words}
+letters = {ch for ch in "abracadabra"}   # {'a','b','r','c','d'}</c>
+<p>Dict comprehension — гениальный способ «превратить список в справочник»: слова → длины, имена → возрасты, города → население. А set-вариант в одну строку делает то, что в старых языках занимает цикл с проверками.</p>`,
+task:`<p>Дано <k>words = ["Python", "JS", "Kotlin", "Go", "Haskell"]</k>.</p><ul><li>Собери в <k>lengths</k> словарь «слово → длина»</li><li>Собери в <k>letters</k> множество символов строки <k>"abracadabra"</k></li></ul>`,
+code:`words = ["Python", "JS", "Kotlin", "Go", "Haskell"]\n\n# lengths и letters\n`,
+sol:`words = ["Python", "JS", "Kotlin", "Go", "Haskell"]\n\nlengths = {w: len(w) for w in words}\nletters = {ch for ch in "abracadabra"}\n`,
+tests:[
+  P('lengths должен содержать длины всех слов', 'assert lengths == {"Python": 6, "JS": 2, "Kotlin": 6, "Go": 2, "Haskell": 7}, "словарь должен сопоставить каждому слову его длину"'),
+  P('letters должен быть множеством {a, b, r, c, d}', 'assert letters == {"a", "b", "r", "c", "d"}, "в множестве — уникальные символы abracadabra"'),
+]},
+{ id:'m9-gen', t:'Генераторы: yield', th:`
+<p>Генератор — «ленивый список»: значения не хранятся, а производятся по требованию. В функции вместо <k>return</k> ставится <k>yield</k> — и каждый вызов выдаёт следующее значение.</p>
+<c>def countdown(n):
+    while n > 0:
+        yield n
+        n -= 1
+
+list(countdown(3))   # [3, 2, 1]</c>
+<p>Память не тратится вовсе — генератор может выдавать хоть бесконечный поток чисел. Функция «замирает» на yield и продолжает с того же места при следующем запросе.</p>`,
+task:`<ul><li>Напиши генератор <k>countdown(n)</k>: выдаёт числа от n до 1</li><li>Выведи <k>list(countdown(5))</k></li></ul>`,
+code:`# генератор countdown\n`,
+sol:`def countdown(n):\n    while n > 0:\n        yield n\n        n -= 1\n\nprint(list(countdown(5)))\n`,
+tests:[
+  P('list(countdown(3)) должен быть [3, 2, 1]', 'assert list(countdown(3)) == [3, 2, 1], "генератор выдаёт 3, 2, 1"'),
+  P('list(countdown(5)) должен быть [5, 4, 3, 2, 1]', 'assert list(countdown(5)) == [5, 4, 3, 2, 1], "генератор выдаёт 5, 4, 3, 2, 1"'),
+  C('Используй yield', /yield/),
+]},
+{ id:'m9-project', t:'Проект: обработка слов', th:`
+<p>Собери всё изученное: сплит строки в слова, comprehension по словам, поиск максимума по ключу. Из таких деталей состоит реальная обработка текста — поиск, индексация, статистика.</p>
+<c>words = text.split()
+longest = max(words, key=len)</c>
+<p><k>max()</k> с <k>key</k> находит не наибольшее число, а «лучший» по критерию элемент. <k>key=len</k> — самый частый: самое длинное слово, самый большой файл, самый активный пользователь.</p>`,
+task:`<p>Дано <k>text = "мы учим python и python учит нас"</k>.</p><ul><li>Разбей текст в список <k>words</k></li><li>Собери в <k>word_lengths</k> словарь «слово → длина» (comprehension)</li><li>Найди в <k>longest</k> самое длинное слово (max с key=len)</li></ul>`,
+code:`text = "мы учим python и python учит нас"\n\n# words, word_lengths и longest\n`,
+sol:`text = "мы учим python и python учит нас"\n\nwords = text.split()\nword_lengths = {w: len(w) for w in words}\nlongest = max(words, key=len)\n`,
+tests:[
+  P('words должен содержать 6 слов из текста', 'assert words == ["мы", "учим", "python", "и", "python", "учит", "нас"], "разбей текст по пробелам через .split()"'),
+  P('word_lengths должен быть словарём слов и их длин', 'assert word_lengths == {"мы": 2, "учим": 4, "python": 6, "и": 1, "учит": 4, "нас": 3}, "каждому слову — его длина"'),
+  P('longest должен быть равен "python"', 'assert longest == "python", "самое длинное слово — python"'),
+]},
+]},
+
+/* ============ 10. ООП ============ */
+{ id:'m10', title:'ООП: классы и объекты', desc:'Классы, наследование, property, магические методы', lessons:[
+{ id:'m10-class', t:'Классы и объекты', th:`
+<p>Класс — чертёж, объект — экземпляр, построенный по нему. Метод <k>__init__</k> вызывается при создании и получает данные; <k>self</k> — сам объект, через него данные сохраняются.</p>
+<c>class Dog:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+rex = Dog("Рекс", 3)
+print(rex.name)    # Рекс</c>
+<p>Один класс — сколько угодно объектов: <k>Dog("Рекс", 3)</k>, <k>Dog("Шарик", 5)</k>… У каждого — свои имя и возраст, поведение общее.</p>`,
+task:`<ul><li>Объяви класс <k>Dog</k> с <k>__init__(self, name, age)</k></li><li>Создай объект <k>rex = Dog("Рекс", 3)</k></li></ul>`,
+code:`class Dog:\n    # __init__ здесь\n    pass\n\nrex = Dog("Рекс", 3)\n`,
+sol:`class Dog:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\nrex = Dog("Рекс", 3)\n`,
+tests:[
+  P('У rex атрибут name должен быть равен "Рекс"', 'assert rex.name == "Рекс", "rex.name должен быть \\"Рекс\\""'),
+  P('У rex атрибут age должен быть равен 3', 'assert rex.age == 3, "rex.age должен быть 3"'),
+  C('Объяви класс Dog с __init__', /class\s+Dog|def\s+__init__/),
+]},
+{ id:'m10-methods', t:'Методы: поведение объектов', th:`
+<p>Метод — функция внутри класса, первым параметром всегда <k>self</k>. Через self метод читает и меняет данные объекта.</p>
+<c>class Dog:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def describe(self):
+        return f"{self.name}, {self.age} года"
+
+    def bark(self):
+        print("Гав!")</c>
+<p>Метод может возвращать значение (<k>return</k>) или действовать (<k>print</k>). Возвращать — гибче: результат можно использовать дальше.</p>`,
+task:`<p>Продолжи класс Dog (см. код).</p><ul><li>Добавь метод <k>describe(self)</k>: возвращает строку <k>Рекс, 3 года</k> (f-строкой из атрибутов)</li><li>Добавь метод <k>bark(self)</k>: печатает <k>Гав!</k></li><li>Создай rex и вызови оба метода</li></ul>`,
+code:`class Dog:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\n    # добавь describe и bark\n\nrex = Dog("Рекс", 3)\n`,
+sol:`class Dog:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\n    def describe(self):\n        return f"{self.name}, {self.age} года"\n\n    def bark(self):\n        print("Гав!")\n\nrex = Dog("Рекс", 3)\nprint(rex.describe())\nrex.bark()\n`,
+tests:[
+  P('describe() должен возвращать "Рекс, 3 года"', 'assert rex.describe() == "Рекс, 3 года", "describe() должен вернуть \\"Рекс, 3 года\\""'),
+  P('bark() должен печатать "Гав!"', 'import io, contextlib\n_b = io.StringIO()\nwith contextlib.redirect_stdout(_b):\n    rex.bark()\nassert "Гав" in _b.getvalue(), "bark() должен печатать гавканье"'),
+]},
+{ id:'m10-str', t:'__str__: строковое представление', th:`
+<p>Что напечатает <k>print(cat)</k>? Мусор вида <k>&lt;__main__.Cat object at 0x...&gt;</k> — если не определить <k>__str__</k>. Этот магический метод говорит Python, как объект выглядит строкой.</p>
+<c>class Cat:
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return f"Кот {self.name}"
+
+print(Cat("Барсик"))   # Кот Барсик</c>
+<p>Методы с двумя подчёркиваниями по краям («dunder-методы») Python вызывает сам в нужные моменты — их не зовут явно.</p>`,
+task:`<ul><li>Класс <k>Cat</k> с атрибутом <k>name</k> уже начат</li><li>Добавь <k>__str__</k>, возвращающий <k>Кот {имя}</k></li><li>Создай <k>cat = Cat("Барсик")</k> и выведи <k>print(cat)</k></li></ul>`,
+code:`class Cat:\n    def __init__(self, name):\n        self.name = name\n\n    # добавь __str__\n\ncat = Cat("Барсик")\n`,
+sol:`class Cat:\n    def __init__(self, name):\n        self.name = name\n\n    def __str__(self):\n        return f"Кот {self.name}"\n\ncat = Cat("Барсик")\nprint(cat)\n`,
+tests:[
+  P('str(cat) должен быть равен "Кот Барсик"', 'assert str(cat) == "Кот Барсик", "__str__ должен вернуть \\"Кот Барсик\\""'),
+  O('Вывод должен быть: Кот Барсик', 'Кот Барсик'),
+  C('Определи метод __str__', /def\s+__str__/),
+]},
+{ id:'m10-state', t:'Изменение состояния', th:`
+<p>Объекты живут: методы меняют их атрибуты, и изменения остаются в объекте. Собака стареет, счёт растёт, персонаж получает урон — всё это методы, которые трогают <k>self</k>.</p>
+<c>def birthday(self):
+    self.age += 1</c>
+<p>Каждый вызов birthday навсегда меняет конкретного объекта — другие собаки не пострадают. Состояние + поведение, инкапсулированные вместе, — и есть суть ООП.</p>`,
+task:`<p>Класс Dog продолжается (rex — «Рекс», 3 года).</p><ul><li>Добавь метод <k>birthday(self)</k>: увеличивает <k>self.age</k> на 1</li><li>Вызови его у rex дважды</li></ul>`,
+code:`class Dog:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\n    # добавь birthday\n\nrex = Dog("Рекс", 3)\n`,
+sol:`class Dog:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\n    def birthday(self):\n        self.age += 1\n\nrex = Dog("Рекс", 3)\nrex.birthday()\nrex.birthday()\n`,
+tests:[
+  P('После двух дней рождения rex.age должен быть 5', 'assert rex.age == 5, "после двух вызовов birthday() возраст должен стать 5"'),
+]},
+{ id:'m10-inherit', t:'Наследование', th:`
+<p>Наследование — «класс-ребёнок получает всё от класса-родителя». Общее живёт в родителе, особенности — в детях. Классы-дети пишутся с родителем в скобках.</p>
+<c>class Animal:
+    def __init__(self, name):
+        self.name = name
+
+class Cat(Animal):
+    def voice(self):
+        return "Мяу"
+
+class Dog(Animal):
+    def voice(self):
+        return "Гав"</c>
+<p>Объект <k>Cat</k> одновременно и кот, и животное: <k>isinstance(simba, Animal)</k> → True. Родителей может быть иерархия любой глубины.</p>`,
+task:`<ul><li>Объяви класс <k>Animal</k> с <k>__init__(self, name)</k></li><li>Объяви <k>Cat(Animal)</k> с методом <k>voice(self)</k>, возвращающим <k>"Мяу"</k></li><li>Создай <k>simba = Cat("Симба")</k></li></ul>`,
+code:`# Animal и Cat\n`,
+sol:`class Animal:\n    def __init__(self, name):\n        self.name = name\n\nclass Cat(Animal):\n    def voice(self):\n        return "Мяу"\n\nsimba = Cat("Симба")\n`,
+tests:[
+  P('simba должен быть экземпляром Cat', 'assert isinstance(simba, Cat), "создай объект класса Cat"'),
+  P('simba должен быть и экземпляром Animal', 'assert isinstance(simba, Animal), "Cat наследует Animal — simba и животное тоже"'),
+  P('simba.voice() должен возвращать "Мяу"', 'assert simba.voice() == "Мяу", "voice() кота должен вернуть \\"Мяу\\""'),
+  P('У simba должен быть атрибут name, равный "Симба"', 'assert simba.name == "Симба", "имя должно храниться в self.name"'),
+]},
+{ id:'m10-super', t:'super(): помощь родителя', th:`
+<p>Когда ребёнок определяет свой <k>__init__</k>, он <b>перекрывает</b> родительский. Позвать родительскую версию, не дублируя код, — функция <k>super()</k>:</p>
+<c>class GuideDog(Dog):
+    def __init__(self, name, age, owner):
+        super().__init__(name, age)   # родитель нарисует name и age
+        self.owner = owner            # ребёнок добавляет своё</c>
+<p><k>super().__init__(...)</k> — «пусть родитель сделает свою часть, остальное — я». Тот же приём работает и для переопределённых методов.</p>`,
+task:`<ul><li>Классы Dog — как в прошлых уроках (name, age)</li><li>Объяви <k>GuideDog(Dog)</k> с <k>__init__(self, name, age, owner)</k>: вызывает <k>super().__init__(name, age)</k> и сохраняет <k>self.owner</k></li><li>Создай <k>helper = GuideDog("Рекс", 5, "Гвидо")</k></li></ul>`,
+code:`class Dog:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\n# GuideDog с super()\n`,
+sol:`class Dog:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\nclass GuideDog(Dog):\n    def __init__(self, name, age, owner):\n        super().__init__(name, age)\n        self.owner = owner\n\nhelper = GuideDog("Рекс", 5, "Гвидо")\n`,
+tests:[
+  P('helper.name должен быть равен "Рекс" (унаследован через super)', 'assert helper.name == "Рекс", "super().__init__ должен сохранить name"'),
+  P('helper.age должен быть равен 5', 'assert helper.age == 5, "super().__init__ должен сохранить age"'),
+  P('helper.owner должен быть равен "Гвидо"', 'assert helper.owner == "Гвидо", "owner сохраняет сам GuideDog"'),
+  P('helper должен быть экземпляром Dog', 'assert isinstance(helper, Dog), "GuideDog наследует Dog"'),
+]},
+{ id:'m10-prop', t:'property: атрибут с мозгами', th:`
+<p><k>@property</k> превращает метод в «умный атрибут»: читается как переменная, а за кулисами выполняется код. Сеттер (<k>@имя.setter</k>) валидирует присваивание.</p>
+<c>class Temperature:
+    @property
+    def celsius(self):
+        return self._celsius
+
+    @celsius.setter
+    def celsius(self, value):
+        if value < -273.15:
+            raise ValueError("ниже абсолютного нуля")
+        self._celsius = value</c>
+<p>Соглашение: внутренние атрибуты с одним подчёркиванием (<k>_celsius</k>) — «не трогать снаружи». Публичный фасад — property с проверками.</p>`,
+task:`<ul><li>Класс <k>Temperature</k>: атрибут <k>celsius</k> через property, внутри хранится <k>_celsius</k> (по умолчанию 20)</li><li>Сеттер бросает <k>ValueError</k>, если значение ниже −273.15</li><li>Создай <k>t = Temperature()</k>, присвой <k>t.celsius = 25</k></li></ul>`,
+code:`class Temperature:\n    # начни с __init__, хранящего self._celsius = 20\n    pass\n\nt = Temperature()\n`,
+sol:`class Temperature:\n    def __init__(self):\n        self._celsius = 20\n\n    @property\n    def celsius(self):\n        return self._celsius\n\n    @celsius.setter\n    def celsius(self, value):\n        if value < -273.15:\n            raise ValueError("ниже абсолютного нуля")\n        self._celsius = value\n\nt = Temperature()\nt.celsius = 25\n`,
+tests:[
+  P('t.celsius должен возвращать 25', 'assert t.celsius == 25, "геттер должен отдать присвоенное значение"'),
+  P('Сеттер должен отклонять -300 через ValueError', 'try:\n    t.celsius = -300\n    _ok = False\nexcept ValueError:\n    _ok = True\nassert _ok, "присвоение ниже -273.15 должно бросать ValueError"'),
+]},
+{ id:'m10-dunders', t:'Магические методы: __add__, __eq__', th:`
+<p>Dunder-методы подключают твои объекты к обычному синтаксису. Определи <k>__add__</k> — и объекты складываются плюсом, <k>__eq__</k> — сравниваются через <k>==</k>, <k>__repr__</k> — красиво печатаются.</p>
+<c>class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def __repr__(self):
+        return f"Vector({self.x}, {self.y})"</c>
+<p>Так_vector складывается как число: <k>Vector(1,2) + Vector(3,4) == Vector(4,6)</k>. Операторный синтаксис для своих типов — вот где Python по-настоящему гибок.</p>`,
+task:`<p>Реализуй класс <k>Vector</k> (см. теорию) с методами <k>__init__</k>, <k>__add__</k>, <k>__eq__</k> и <k>__repr__</k> (возвращает <k>Vector(x, y)</k>).</p><ul><li>Проверь: <k>Vector(1, 2) + Vector(3, 4) == Vector(4, 6)</k></li></ul>`,
+code:`class Vector:\n    # __init__, __add__, __eq__, __repr__\n    pass\n`,
+sol:`class Vector:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __add__(self, other):\n        return Vector(self.x + other.x, self.y + other.y)\n\n    def __eq__(self, other):\n        return self.x == other.x and self.y == other.y\n\n    def __repr__(self):\n        return f"Vector({self.x}, {self.y})"\n`,
+tests:[
+  P('Vector(1, 2) + Vector(3, 4) должен быть равен Vector(4, 6)', 'assert Vector(1, 2) + Vector(3, 4) == Vector(4, 6), "сложение векторов должно работать через +"'),
+  P('Vector(2, 2) не должен быть равен Vector(2, 3)', 'assert not (Vector(2, 2) == Vector(2, 3)), "равенство сравнивает координаты"'),
+  P('repr(Vector(1, 2)) должен быть "Vector(1, 2)"', 'assert repr(Vector(1, 2)) == "Vector(1, 2)", "__repr__ должен вернуть \\"Vector(1, 2)\\""'),
+]},
+{ id:'m10-bank', t:'Проект: BankAccount', th:`
+<p>Собери ООП в один проект: банковский счёт. Баланс спрятан внутри, методы <k>deposit</k> и <k>withdraw</k> — единственная дверь к нему, а попытка снять больше, чем есть, оборачивается исключением. Это и есть инкапсуляция в бою.</p>
+<c>class BankAccount:
+    def __init__(self, balance):
+        self._balance = balance</c>
+<p>Контракт: <k>balance</k> — property; <k>deposit(amount)</k> и <k>withdraw(amount)</k> меняют баланс; снятие сверх баланса бросает <k>ValueError</k>.</p>`,
+task:`<ul><li>Класс <k>BankAccount</k>: <k>__init__(self, balance)</k> хранит стартовый баланс</li><li><k>balance</k> — property, доступное для чтения</li><li><k>deposit(amount)</k> увеличивает баланс</li><li><k>withdraw(amount)</k> уменьшает; если amount больше баланса — <k>ValueError</k></li></ul>`,
+code:`class BankAccount:\n    # __init__, balance, deposit, withdraw\n    pass\n`,
+sol:`class BankAccount:\n    def __init__(self, balance):\n        self._balance = balance\n\n    @property\n    def balance(self):\n        return self._balance\n\n    def deposit(self, amount):\n        self._balance += amount\n\n    def withdraw(self, amount):\n        if amount > self._balance:\n            raise ValueError("недостаточно средств")\n        self._balance -= amount\n`,
+tests:[
+  P('Начальный баланс должен читаться: BankAccount(100).balance == 100', 'assert BankAccount(100).balance == 100, "balance должен отдавать стартовый баланс"'),
+  P('deposit(50) должен увеличивать баланс до 150', 'acc = BankAccount(100)\nacc.deposit(50)\nassert acc.balance == 150, "после deposit(50) баланс должен стать 150"'),
+  P('withdraw(30) должен уменьшать баланс до 70', 'acc = BankAccount(100)\nacc.withdraw(30)\nassert acc.balance == 70, "после withdraw(30) баланс должен стать 70"'),
+  P('Снятие сверх баланса должно бросать ValueError', 'acc = BankAccount(100)\ntry:\n    acc.withdraw(1000)\n    _ok = False\nexcept ValueError:\n    _ok = True\nassert _ok, "нельзя снять больше, чем есть на счету"'),
+]},
+]},
+
+/* ============ 11. ИСКЛЮЧЕНИЯ И ФАЙЛЫ ============ */
+{ id:'m11', title:'Исключения и файлы', desc:'try/except, raise, чтение и запись файлов', lessons:[
+{ id:'m11-try', t:'try/except: ловим ошибки', th:`
+<p>Ошибки времени выполнения — не катастрофа, а язык, на котором программа говорит «что-то не так». Блок <k>try</k> пробует код, <k>except</k> ловит конкретную ошибку и реагирует.</p>
+<c>def safe_divide(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError:
+        print("Ошибка: деление на ноль")
+        return None</c>
+<p>Указывай <b>конкретный</b> тип исключения. Голый <k>except:</k> глотает всё подряд — включая опечатки, которые лучше видеть.</p>`,
+task:`<ul><li>Напиши функцию <k>safe_divide(a, b)</k>: при делении на ноль печатает <k>Ошибка: деление на ноль</k> и возвращает <k>None</k>, иначе возвращает частное</li><li>Выведи <k>safe_divide(10, 2)</k></li></ul>`,
+code:`def safe_divide(a, b):\n    # защита от нуля\n    pass\n`,
+sol:`def safe_divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        print("Ошибка: деление на ноль")\n        return None\n\nprint(safe_divide(10, 2))\n`,
+tests:[
+  P('safe_divide(10, 2) должен возвращать 5.0', 'assert safe_divide(10, 2) == 5.0, "обычное деление должно работать"'),
+  P('safe_divide(1, 0) должен возвращать None', 'assert safe_divide(1, 0) is None, "при делении на ноль функция возвращает None"'),
+  P('При делении на ноль должно печататься сообщение об ошибке', 'import io, contextlib\n_b = io.StringIO()\nwith contextlib.redirect_stdout(_b):\n    safe_divide(1, 0)\nassert "Ошибка" in _b.getvalue(), "нужно напечатать сообщение об ошибке"'),
+  C('Используй try/except', /except\s+ZeroDivisionError/),
+]},
+{ id:'m11-else', t:'else и несколько except', th:`
+<p>У блока try есть продолжение: <k>else</k> выполняется, <b>если ошибок не было</b> — туда выносят «счастливый путь». Веток except может быть несколько — по одной на тип ошибки.</p>
+<c>try:
+    number = int("42")
+except ValueError:
+    print("Это не число")
+else:
+    print("Получилось:", number)</c>
+<p>Код становится самодокументируемым: что делаем при ошибке, что при успехе — разложено по полочкам, без вложенных условий.</p>`,
+task:`<ul><li>В try преобразуй <k>"42"</k> в число через <k>int()</k> и сохрани в <k>number</k></li><li>При <k>ValueError</k> выведи <k>Это не число</k></li><li>В <k>else</k> выведи <k>Получилось: 42</k> (с использованием number)</li></ul>`,
+code:`# try / except / else\n`,
+sol:`try:\n    number = int("42")\nexcept ValueError:\n    print("Это не число")\nelse:\n    print("Получилось:", number)\n`,
+tests:[
+  O('Вывод должен быть: Получилось: 42', 'Получилось: 42'),
+  C('Используй ветку else', /else\s*:/),
+  C('Используй except ValueError', /except\s+ValueError/),
+]},
+{ id:'m11-finally', t:'finally: код, который выполнится всегда', th:`
+<p><k>finally</k> выполняется <b>всегда</b> — была ошибка или нет, случился break или return. Туда ставят уборку: закрыть соединение, отпустить ресурс, записать лог.</p>
+<c>try:
+    risky()
+except SomeError:
+    print("поймали")
+finally:
+    print("Уборка завершена")   # напечатается в любом случае</c>
+<p>Полная форма: try → except… → else → finally. Понимание этой лестницы — пропуск в мир надёжного кода: базы данных, файлы, сеть.</p>`,
+task:`<ul><li>В try подели <k>x = 10 / 0</k> (оберни в try)</li><li>В except ZeroDivisionError выведи <k>Поймал ошибку</k></li><li>В finally выведи <k>Проверка завершена</k></li></ul>`,
+code:`# try / except / finally\n`,
+sol:`try:\n    x = 10 / 0\nexcept ZeroDivisionError:\n    print("Поймал ошибку")\nfinally:\n    print("Проверка завершена")\n`,
+tests:[
+  O('Вывод: две строки — «Поймал ошибку» и «Проверка завершена»', 'Поймал ошибку\nПроверка завершена'),
+  C('Используй finally', /finally\s*:/),
+]},
+{ id:'m11-raise', t:'raise и свои исключения', th:`
+<p>Иногда ошибку нужно <b>поднять самому</b> — оператором <k>raise</k>. Свои классы исключений наследуются от <k>Exception</k>, и по имени уже понятно, что пошло не так.</p>
+<c>class ShortPasswordError(Exception):
+    pass
+
+def check_password(pw):
+    if len(pw) < 8:
+        raise ShortPasswordError("Пароль короче 8 символов")</c>
+<p>Хорошее исключение — как хороший заголовок: тот, кто его поймает, сразу понимает суть. Не «Error 42», а «ShortPasswordError».</p>`,
+task:`<ul><li>Объяви класс <k>ShortPasswordError(Exception)</k> с <k>pass</k> в теле</li><li>Функция <k>check_password(pw)</k>: если пароль короче 8 символов — <k>raise ShortPasswordError("Пароль короче 8 символов")</k></li></ul>`,
+code:`# свой класс исключения и проверка пароля\n`,
+sol:`class ShortPasswordError(Exception):\n    pass\n\ndef check_password(pw):\n    if len(pw) < 8:\n        raise ShortPasswordError("Пароль короче 8 символов")\n`,
+tests:[
+  C('Объяви класс ShortPasswordError', /class\s+ShortPasswordError\s*\(\s*Exception\s*\)/),
+  P('Короткий пароль должен поднимать ShortPasswordError', 'try:\n    check_password("abc")\n    _ok = False\nexcept ShortPasswordError:\n    _ok = True\nassert _ok, "check_password(\\"abc\\") должен поднять ShortPasswordError"'),
+  P('Сообщение исключения должно объяснять проблему', 'try:\n    check_password("abc")\nexcept ShortPasswordError as e:\n    assert "корот" in str(e), "в сообщении должно быть слово \\"корот\\\""'),
+]},
+{ id:'m11-file', t:'Файлы: запись и чтение', th:`
+<p>Работа с файлами: <k>open(имя, режим)</k>, режимы <k>"w"</k> — запись (перезапишет!), <k>"r"</k> — чтение, <k>"a"</k> — дозапись в конец. После записи файл обязательно <k>close()</k> — или используй <k>with</k> из следующего урока.</p>
+<c>f = open("diary.txt", "w", encoding="utf-8")
+f.write("Дорогой дневник, я пишу на Python.")
+f.close()
+
+f = open("diary.txt", encoding="utf-8")
+print(f.read())</c>
+<div class="note">Всегда указывай <k>encoding="utf-8"</k> при записи — иначе кириллица может сохранить в системной кодировке и потом не прочитаться. В нашей песочнице файл живёт в памяти браузера.</div>`,
+task:`<ul><li>Запиши в файл <k>diary.txt</k> строку <k>Дорогой дневник, сегодня я начал учить Python.</k></li><li>Закрой файл, открой его на чтение и выведи содержимое</li></ul>`,
+code:`# запиши строку в diary.txt, затем прочитай и выведи\n`,
+sol:`f = open("diary.txt", "w", encoding="utf-8")\nf.write("Дорогой дневник, сегодня я начал учить Python.")\nf.close()\n\nf = open("diary.txt", encoding="utf-8")\nprint(f.read())\nf.close()\n`,
+tests:[
+  C('Используй open() для работы с файлом', /open\s*\(/),
+  P('В файле diary.txt должна быть строка из задания', 'with open("diary.txt", encoding="utf-8") as f:\n    _t = f.read()\nassert _t.strip() == "Дорогой дневник, сегодня я начал учить Python.", "файл должен содержать точную строку из задания"'),
+  H('Содержимое файла должно быть выведено', /дневник/i),
+]},
+{ id:'m11-with', t:'with: менеджер контекста', th:`
+<p><k>with</k> — элегантная замена open/close: файл автоматически закроется, что бы ни случилось внутри блока — даже исключение. Это тот же принцип «уборки», что и finally, но одной строкой.</p>
+<c>with open("diary.txt", "a", encoding="utf-8") as f:
+    f.write("Новая запись.")</c>
+<p>Режим <k>"a"</k> — append: дописывает в конец, не трогая существующее. Правило: <k>with</k> — всегда предпочтительнее ручного close: забыть закрыть невозможно в принципе.</p>`,
+task:`<ul><li>Сначала запиши (в режиме <k>"w"</k>) первую строку: <k>Дорогой дневник, сегодня я начал учить Python.</k></li><li>Затем через <k>with</k> и режим <k>"a"</k> допиши вторую: <k>А Python — навсегда.</k></li><li>Прочитай файл и выведи обе строки</li></ul>`,
+code:`# w, затем a через with, затем чтение\n`,
+sol:`with open("diary.txt", "w", encoding="utf-8") as f:\n    f.write("Дорогой дневник, сегодня я начал учить Python.")\n\nwith open("diary.txt", "a", encoding="utf-8") as f:\n    f.write("А Python — навсегда.")\n\nwith open("diary.txt", encoding="utf-8") as f:\n    print(f.read())\n`,
+tests:[
+  C('Используй конструкцию with open(...)', /with\s+open\s*\(/),
+  P('Файл должен содержать обе строки', 'with open("diary.txt", encoding="utf-8") as f:\n    _t = f.read()\nassert "начал учить Python" in _t and "навсегда" in _t, "в файле должны быть обе записи"'),
+  O('Вывод: две строки дневника', 'Дорогой дневник, сегодня я начал учить Python.\nА Python — навсегда.'),
+]},
+{ id:'m11-project', t:'Проект: безопасный парсер', th:`
+<p>Финальный комбо-приём модуля: конвертация внешних данных в числа. Пользовательский ввод, конфиги, CSV — приходят строками, и никогда нельзя знать заранее, что там. <k>try/except</k> + запасное значение = пуленепробиваемый парсер.</p>
+<c>def to_int(value, default=0):
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return default</c>
+<p>Кортеж в except — сразу несколько типов ошибок. Такой парсер — рабочая лошадка любого приложения с вводом.</p>`,
+task:`<ul><li>Напиши функцию <k>to_int(value, default=0)</k>: пытается <k>int(value)</k>, при <k>ValueError</k> или <k>TypeError</k> возвращает <k>default</k></li></ul>`,
+code:`def to_int(value, default=0):\n    # безопасная конвертация\n    pass\n`,
+sol:`def to_int(value, default=0):\n    try:\n        return int(value)\n    except (ValueError, TypeError):\n        return default\n`,
+tests:[
+  P('to_int("42") должен возвращать 42', 'assert to_int("42") == 42, "числовая строка должна конвертироваться"'),
+  P('to_int("abc") должен возвращать 0 (дефолт)', 'assert to_int("abc") == 0, "мусорная строка — запасное значение"'),
+  P('to_int("abc", -1) должен возвращать -1 (кастомный дефолт)', 'assert to_int("abc", -1) == -1, "запасное значение задаётся вторым аргументом"'),
+  P('to_int(7) должен возвращать 7 (число проходит насквозь)', 'assert to_int(7) == 7, "число и так число"'),
+]},
+]},
+
+/* ============ 12. МОДУЛИ И БИБЛИОТЕКА ============ */
+{ id:'m12', title:'Модули и стандартная библиотека', desc:'import, math, random, datetime, collections', lessons:[
+{ id:'m12-import', t:'import: чужие суперсилы', th:`
+<p>Python силён библиотеками. Оператор <k>import</k> подключает модуль — файл с готовыми функциями. Доступ к функциям — через точку: <k>math.sqrt(144)</k>.</p>
+<c>import math
+
+math.sqrt(144)    # 12.0
+math.pi           # 3.14159...
+math.floor(3.7)   # 3</c>
+<p>Батарейки в комплекте: в стандартной библиотеке Python — сотни модулей: математика, случайность, даты, работа с текстом, сетью, файлами. Прежде чем писать своё — проверь, нет ли готового.</p>`,
+task:`<ul><li>Подключи модуль <k>math</k></li><li>Выведи <k>math.sqrt(144)</k> и <k>round(math.pi, 2)</k> — двумя командами print</li></ul>`,
+code:`# подключи math и выведи результаты\n`,
+sol:`import math\n\nprint(math.sqrt(144))\nprint(round(math.pi, 2))\n`,
+tests:[
+  C('Используй import math', /import\s+math/),
+  O('Две строки: 12.0 и 3.14', '12.0\n3.14'),
+]},
+{ id:'m12-from', t:'from ... import ... as', th:`
+<p>Импортировать можно не весь модуль, а конкретные имена: <k>from math import sqrt</k>. А <k>as</k> даёт функции короткое прозвище.</p>
+<c>from math import sqrt as root
+
+root(25)    # 5.0</c>
+<p>Так пишут, когда функция нужна часто и имя хочется покороче. Слишком много точечных префиксов <k>math.</k>, <k>os.</k> загромождает код — выбор формы импорта — вопрос читаемости.</p>`,
+task:`<ul><li>Импортируй <k>sqrt</k> из модуля math под именем <k>root</k></li><li>Выведи <k>root(25)</k></li></ul>`,
+code:`# from import as\n`,
+sol:`from math import sqrt as root\n\nprint(root(25))\n`,
+tests:[
+  C('Используй from math import sqrt as root', /from\s+math\s+import\s+sqrt\s+as\s+root/),
+  O('Вывод должен быть: 5.0', '5.0'),
+]},
+{ id:'m12-random', t:'random: случайность под контролем', th:`
+<p>Модуль <k>random</k> — источник непредсказуемости: <k>randint(a, b)</k> — целое в диапазоне включительно, <k>choice(список)</k> — случайный элемент, <k>shuffle(список)</k> — перемешать на месте.</p>
+<c>import random
+
+die = random.randint(1, 6)
+coin = random.choice(["орёл", "решка"])</c>
+<p>Игры, симуляции, генерация данных — везде случай. А <k>random.seed(42)</k> фиксирует последовательность: одинаковое зерно — одинаковые «случайные» числа, удобно для отладки и тестов.</p>`,
+task:`<ul><li>Подключи модуль <k>random</k></li><li>Запиши в <k>die</k> бросок кубика (randint от 1 до 6)</li><li>Запиши в <k>coin</k> монету (choice из «орёл»/«решка»)</li><li>Выведи обе переменные одной командой</li></ul>`,
+code:`# кубик и монета\n`,
+sol:`import random\n\ndie = random.randint(1, 6)\ncoin = random.choice(["орёл", "решка"])\nprint(die, coin)\n`,
+tests:[
+  C('Используй import random', /import\s+random/),
+  P('die должен быть целым числом от 1 до 6', 'assert isinstance(die, int) and 1 <= die <= 6, "die — бросок кубика, целое от 1 до 6"'),
+  P('coin должен быть «орёл» или «решка»', 'assert coin in ("орёл", "решка"), "coin — случайный выбор из двух вариантов"'),
+]},
+{ id:'m12-datetime', t:'datetime: работа с датами', th:`
+<p>Модуль <k>datetime</k> знает про календари, високосные годы и часовые пояса. <k>date.today()</k> — сегодня, а метод <k>strftime(формат)</k> форматирует дату в строку.</p>
+<c>from datetime import date
+
+today = date.today()
+today.year                 # 2025
+today.strftime("%d.%m.%Y") # 15.06.2025</c>
+<p>Коды формата: <k>%d</k> — день, <k>%m</k> — месяц, <k>%Y</k> — четырёхзначный год, <k>%H:%M</k> — часы и минуты (у datetime). Даты, возраста, «сколько дней осталось» — его территория.</p>`,
+task:`<ul><li>Импортируй <k>date</k> из <k>datetime</k></li><li>Запиши в <k>today</k> сегодняшнюю дату</li><li>Запиши в <k>formatted</k> дату в формате <k>дд.мм.гггг</k> через strftime</li><li>Выведи <k>formatted</k></li></ul>`,
+code:`# сегодняшняя дата в формате дд.мм.гггг\n`,
+sol:`from datetime import date\n\ntoday = date.today()\nformatted = today.strftime("%d.%m.%Y")\nprint(formatted)\n`,
+tests:[
+  C('Используй метод strftime', /\.strftime\s*\(/),
+  P('formatted должен быть сегодняшней датой в формате дд.мм.гггг', 'import datetime as _dt\nassert formatted == _dt.date.today().strftime("%d.%m.%Y"), "формат — день.месяц.год с ведущими нулями"'),
+]},
+{ id:'m12-counter', t:'collections.Counter', th:`
+<p>Модуль <k>collections</k> — коллекции с суперспособностями. <k>Counter</k> считает вхождения элементов в одну строку — то, что в проекте про частоты мы делали циклом и <k>.get()</k>:</p>
+<c>from collections import Counter
+
+letters = Counter("абракадабра")
+letters["а"]              # 5
+letters.most_common(2)    # [('а', 5), ('б', 2)]</c>
+<p><k>most_common(n)</k> выдаёт n самых частых элементов с их счётчиками — готовый топ-лист. Counter работает со строками, словами, любыми хешируемыми объектами.</p>`,
+task:`<ul><li>Импортируй <k>Counter</k> из <k>collections</k></li><li>Посчитай в <k>letters</k> буквы строки <k>"абракадабра"</k></li><li>Выведи <k>letters.most_common(1)</k></li></ul>`,
+code:`# частоты через Counter\n`,
+sol:`from collections import Counter\n\nletters = Counter("абракадабра")\nprint(letters.most_common(1))\n`,
+tests:[
+  C('Используй Counter из collections', /from\s+collections\s+import\s+Counter/),
+  P('letters["а"] должен быть равен 5', 'assert letters["а"] == 5, "буква «а» встречается 5 раз"'),
+  P('most_common(1) должен вернуть [("а", 5)]', 'assert letters.most_common(1) == [("а", 5)], "самая частая буква — «а» с 5 вхождениями"'),
+]},
+{ id:'m12-project', t:'Проект: генератор паролей', th:`
+<p>Финал модуля — полезная утилита. Хороший пароль: достаточно длинный, содержит строчные, заглавные и цифры. План: собрать алфавит из <k>string.ascii_letters + string.digits</k>, гарантировать по одному символу каждого типа, добрать случайными и перемешать.</p>
+<c>import random, string
+
+alphabet = string.ascii_letters + string.digits</c>
+<div class="note">Стратегия «сначала по одному гарантированному, потом добор, потом random.shuffle» — стандартный приём генераторов: и случайность, и инварианты.</div>`,
+task:`<ul><li>Напиши функцию <k>generate_password(length=12)</k>: возвращает строку из строчных и заглавных латинских букв и цифр</li><li>В пароле обязательно есть хотя бы одна строчная, одна заглавная буква и одна цифра</li><li>Длина должна точно равняться <k>length</k></li></ul>`,
+code:`import random\nimport string\n\ndef generate_password(length=12):\n    # собери надёжный пароль\n    pass\n`,
+sol:`import random\nimport string\n\ndef generate_password(length=12):\n    alphabet = string.ascii_letters + string.digits\n    chars = [\n        random.choice(string.ascii_lowercase),\n        random.choice(string.ascii_uppercase),\n        random.choice(string.digits),\n    ]\n    chars += random.choices(alphabet, k=length - 3)\n    random.shuffle(chars)\n    return "".join(chars)\n`,
+tests:[
+  P('Пароль по умолчанию — строка из 12 символов', 'pw = generate_password()\nassert isinstance(pw, str) and len(pw) == 12, "generate_password() должен вернуть строку из 12 символов"'),
+  P('В пароле есть строчные, заглавные буквы и цифры', 'pw = generate_password()\nassert any(c.islower() for c in pw) and any(c.isupper() for c in pw) and any(c.isdigit() for c in pw), "нужны символы всех трёх типов"'),
+  P('generate_password(16) должен вернуть 16 символов', 'assert len(generate_password(16)) == 16, "длина должна точно равняться аргументу"'),
+  P('Пароль должен состоять только из букв и цифр', 'import string\npw = generate_password()\nassert all(c in string.ascii_letters + string.digits for c in pw), "только латинские буквы и цифры"'),
+]},
+]},
+
+/* ============ 13. ИТОГОВЫЕ ПРОЕКТЫ ============ */
+{ id:'m13', title:'Итоговые проекты', desc:'Собери знания в настоящие программы — и получи сертификат', lessons:[
+{ id:'m13-bmi', t:'Калькулятор ИМТ', th:`
+<p>ИМТ = вес / рост². Проект собирает всё, что ты умеешь: функции с параметрами, округление, условия-лестницу. Прежде чем писать — прогони формулу в голове: 70 кг при 1.75 м → 70 / 3.0625 ≈ 22.9.</p>
+<p>Категории: ИМТ ниже 18.5 — «недостаточный вес», 18.5–24.9 — «норма», 25–29.9 — «избыточный вес», 30 и выше — «ожирение».</p>
+<div class="note">Два маленьких испытания в одном: посчитать точно (round до 1 знака) и верно разложить границы категорий — следи, чтобы соседние ветки не перекрывались.</div>`,
+task:`<ul><li>Функция <k>bmi(weight, height)</k>: возвращает ИМТ, округлённый до 1 знака</li><li>Функция <k>bmi_category(value)</k>: возвращает категорию словом («норма», «ожирение» и т.д.)</li></ul>`,
+code:`def bmi(weight, height):\n    # ИМТ = вес / рост в квадрате\n    pass\n\ndef bmi_category(value):\n    # верни категорию словом\n    pass\n`,
+sol:`def bmi(weight, height):\n    return round(weight / height ** 2, 1)\n\ndef bmi_category(value):\n    if value < 18.5:\n        return "недостаточный вес"\n    elif value < 25:\n        return "норма"\n    elif value < 30:\n        return "избыточный вес"\n    else:\n        return "ожирение"\n`,
+tests:[
+  P('bmi(70, 1.75) должен возвращать 22.9', 'assert bmi(70, 1.75) == 22.9, "70 / 1.75² ≈ 22.9"'),
+  P('bmi(100, 1.75) должен возвращать 32.7', 'assert bmi(100, 1.75) == 32.7, "100 / 1.75² ≈ 32.7"'),
+  P('bmi_category(22.9) должен возвращать "норма"', 'assert bmi_category(22.9) == "норма", "22.9 — норма"'),
+  P('bmi_category(17) должен возвращать "недостаточный вес"', 'assert bmi_category(17) == "недостаточный вес", "ниже 18.5 — недостаточный вес"'),
+  P('bmi_category(30) должен возвращать "ожирение"', 'assert bmi_category(30) == "ожирение", "30 и выше — ожирение"'),
+]},
+{ id:'m13-caesar', t:'Шифр Цезаря', th:`
+<p>Древний шифр: каждая буква сдвигается по алфавиту на k позиций, с оборотом с конца в начало. «abc» со сдвигом 1 → «bcd», «xyz» со сдвигом 3 → «abc». Знаки и пробелы — без изменений.</p>
+<p>Формула оборота для строчных: <k>chr((ord(ch) - ord("a") + shift) % 26 + ord("a"))</k>. Отрицательный сдвиг расшифровывает: <k>caesar(caesar(s, k), -k) == s</k>.</p>
+<div class="note">Функции ord() и chr() — мост между символами и их кодами. Внимательно обработай и строчные, и заглавные — у них разные базовые коды.</div>`,
+task:`<ul><li>Функция <k>caesar(text, shift)</k>: шифрует латинские буквы со сдвигом, остальные символы не трогает</li><li>Работает и с отрицательным сдвигом (расшифровка)</li></ul>`,
+code:`def caesar(text, shift):\n    # сдвинь латинские буквы по алфавиту\n    pass\n`,
+sol:`def caesar(text, shift):\n    result = []\n    for ch in text:\n        if ch.islower():\n            result.append(chr((ord(ch) - ord("a") + shift) % 26 + ord("a")))\n        elif ch.isupper():\n            result.append(chr((ord(ch) - ord("A") + shift) % 26 + ord("A")))\n        else:\n            result.append(ch)\n    return "".join(result)\n`,
+tests:[
+  P('caesar("abc", 1) должен возвращать "bcd"', 'assert caesar("abc", 1) == "bcd", "сдвиг на 1"'),
+  P('caesar("xyz", 3) должен возвращать "abc" — с оборотом алфавита', 'assert caesar("xyz", 3) == "abc", "z оборачивается в a"'),
+  P('caesar("Hello, World!", 3) должен возвращать "Khoor, Zruog!"', 'assert caesar("Hello, World!", 3) == "Khoor, Zruog!", "регистр и знаки должны сохраниться"'),
+  P('Расшифровка: caesar(caesar(s, k), -k) == s', 'assert caesar(caesar("Python", 5), -5) == "Python", "отрицательный сдвиг отменяет шифрование"'),
+]},
+{ id:'m13-palindrome', t:'Проверка палиндрома', th:`
+<p>Палиндром читается одинаково в обе стороны: «А роза упала на лапу Азора». Пробелы, регистр и пунктуация при проверке игнорируются — сравниваем только «скелет» из букв и цифр.</p>
+<p>План: <k>text.lower()</k>, отфильтровать <k>ch.isalnum()</k>, сравнить полученное с его разворотом. Разворот ты уже знаешь — <k>s[::-1]</k>.</p>`,
+task:`<ul><li>Функция <k>is_palindrome(text)</k>: True, если текст — палиндром (без учёта регистра, пробелов и знаков), иначе False</li></ul>`,
+code:`def is_palindrome(text):\n    # сравни очищенный текст с его разворотом\n    pass\n`,
+sol:`def is_palindrome(text):\n    cleaned = "".join(ch.lower() for ch in text if ch.isalnum())\n    return cleaned == cleaned[::-1]\n`,
+tests:[
+  P('is_palindrome("А роза упала на лапу Азора") должен возвращать True', 'assert is_palindrome("А роза упала на лапу Азора") is True, "классический русский палиндром"'),
+  P('is_palindrome("привет") должен возвращать False', 'assert is_palindrome("привет") is False, "обычное слово — не палиндром"'),
+  P('is_palindrome("12321") должен возвращать True', 'assert is_palindrome("12321") is True, "цифры тоже считаются"'),
+]},
+{ id:'m13-stats', t:'Анализ текста', th:`
+<p>Статистика по тексту в один словарь: количество слов, символов без пробелов, средняя длина слова и самое длинное слово. Всё, что нужно, ты уже проходил: split, filter/comp, len, round, max(key=len).</p>
+<p>Контракт тестов (работаем с текстом «Мы учим Python каждый день»): words — 5, chars — 22, avg_word_length — 4.4, longest — «Python» (первое из максимальных по длине).</p>`,
+task:`<ul><li>Функция <k>analyze(text)</k>: возвращает словарь с ключами <k>"words"</k>, <k>"chars"</k>, <k>"avg_word_length"</k> (округление до 1 знака) и <k>"longest"</k></li></ul>`,
+code:`def analyze(text):\n    # собери статистику в словарь\n    pass\n`,
+sol:`def analyze(text):\n    words = text.split()\n    chars = len("".join(text.split()))\n    avg = round(chars / len(words), 1)\n    longest = max(words, key=len)\n    return {\n        "words": len(words),\n        "chars": chars,\n        "avg_word_length": avg,\n        "longest": longest,\n    }\n`,
+tests:[
+  P('analyze(...)[\'words\'] должен вернуть 5', 'r = analyze("Мы учим Python каждый день")\nassert r["words"] == 5, "в тексте 5 слов"'),
+  P('analyze(...)[\'chars\'] должен вернуть 22', 'r = analyze("Мы учим Python каждый день")\nassert r["chars"] == 22, "22 символа без пробелов"'),
+  P('avg_word_length должен быть равен 4.4', 'r = analyze("Мы учим Python каждый день")\nassert abs(r["avg_word_length"] - 4.4) < 0.01, "22 / 5 = 4.4"'),
+  P('longest должен быть равен "Python"', 'r = analyze("Мы учим Python каждый день")\nassert r["longest"] == "Python", "самое длинное слово — Python (первое из равных)"'),
+]},
+{ id:'m13-notes', t:'Проект: менеджер заметок', th:`
+<p>Большой проект: класс <k>Notebook</k> с добавлением, поиском, удалением и сохранением в JSON-файл. Всё вместе: ООП, строки, словари, файлы, модуль json.</p>
+<p>Контракт:</p>
+<ul><li><k>add(title, text)</k> — добавляет заметку</li><li><k>find(query)</k> — список заголовков, содержащих query без учёта регистра</li><li><k>delete(title)</k> — True, если заметка была, иначе False</li><li><k>save(filename="notes.json")</k> — пишет список пар <k>{"title": ..., "text": ...}</k> (json.dump с ensure_ascii=False)</li></ul>`,
+task:`<ul><li>Реализуй класс <k>Notebook</k> по контракту выше</li><li>В конце программы: добавь две заметки и сохрани в файл</li></ul>`,
+code:`import json\n\nclass Notebook:\n    # add, find, delete, save\n    pass\n`,
+sol:`import json\n\nclass Notebook:\n    def __init__(self):\n        self.notes = []\n\n    def add(self, title, text):\n        self.notes.append({"title": title, "text": text})\n\n    def find(self, query):\n        q = query.lower()\n        return [n["title"] for n in self.notes if q in n["title"].lower()]\n\n    def delete(self, title):\n        for n in self.notes:\n            if n["title"] == title:\n                self.notes.remove(n)\n                return True\n        return False\n\n    def save(self, filename="notes.json"):\n        with open(filename, "w", encoding="utf-8") as f:\n            json.dump(self.notes, f, ensure_ascii=False, indent=2)\n\nnb = Notebook()\nnb.add("Покупки", "молоко, хлеб")\nnb.add("Идеи", "написать курс по Python")\nnb.save("notes.json")\n`,
+tests:[
+  P('find должен искать без учёта регистра', 'nb = Notebook()\nnb.add("Покупки", "молоко, хлеб")\nassert nb.find("пок") == ["Покупки"], "поиск регистронезависимый"'),
+  P('delete должен удалять заметку и возвращать True', 'nb = Notebook()\nnb.add("Покупки", "молоко")\nassert nb.delete("Покупки") is True, "delete возвращает True при успехе"'),
+  P('delete несуществующей заметки возвращает False', 'nb = Notebook()\nassert nb.delete("Нет такой") is False, "нечего удалять — False"'),
+  P('save должен писать корректный JSON-файл', 'nb = Notebook()\nnb.add("Покупки", "молоко, хлеб")\nnb.add("Идеи", "написать курс по Python")\nnb.delete("Покупки")\nnb.save("notes.json")\nimport json as _j\nwith open("notes.json", encoding="utf-8") as f:\n    _data = _j.load(f)\nassert _data == [{"title": "Идеи", "text": "написать курс по Python"}], "файл должен содержать список словарей title/text"'),
+]},
+{ id:'m13-library', t:'Финальный проект: библиотека', th:`
+<p>Последний проект курса — книжная библиотека. Классы, наследование не обязательно, зато обязательны: поиск по автору, выдача книги с защитой от повторной выдачи и счётчик. Всё — с исключениями там, где дело плохо.</p>
+<p>Контракт:</p>
+<ul><li><k>Book(title, author, year)</k>, атрибут <k>available</k> = True по умолчанию</li><li><k>Library.add_book(book)</k></li><li><k>Library.find_by_author(query)</k> — список названий, чей автор содержит query без учёта регистра</li><li><k>Library.borrow(title)</k> — выдаёт книгу (available = False); повторная выдача той же книги — <k>ValueError</k></li><li><k>Library.count</k> — количество книг (property)</li></ul>
+<div class="note">После этого урока остаётся только сертификат. Ты дошёл — это факт, которым стоит гордиться.</div>`,
+task:`<ul><li>Реализуй <k>Book</k> и <k>Library</k> по контракту</li></ul>`,
+code:`class Book:\n    # title, author, year, available\n    pass\n\nclass Library:\n    # add_book, find_by_author, borrow, count\n    pass\n`,
+sol:`class Book:\n    def __init__(self, title, author, year):\n        self.title = title\n        self.author = author\n        self.year = year\n        self.available = True\n\nclass Library:\n    def __init__(self):\n        self.books = []\n\n    def add_book(self, book):\n        self.books.append(book)\n\n    def find_by_author(self, query):\n        q = query.lower()\n        return [b.title for b in self.books if q in b.author.lower()]\n\n    def borrow(self, title):\n        for b in self.books:\n            if b.title == title:\n                if not b.available:\n                    raise ValueError("книга уже выдана")\n                b.available = False\n                return\n        raise ValueError("книга не найдена")\n\n    @property\n    def count(self):\n        return len(self.books)\n`,
+tests:[
+  P('find_by_author должен искать по части фамилии без учёта регистра', 'lib = Library()\nlib.add_book(Book("Чистый код", "Роберт Мартин", 2008))\nlib.add_book(Book("Идеальный программист", "Роберт Мартин", 2010))\nlib.add_book(Book("Грокаем алгоритмы", "Адитья Бхаргава", 2016))\nassert lib.find_by_author("мартин") == ["Чистый код", "Идеальный программист"], "должны найтись обе книги Мартина"'),
+  P('borrow должен выдавать книгу — available становится False', 'lib = Library()\nlib.add_book(Book("Чистый код", "Роберт Мартин", 2008))\nlib.borrow("Чистый код")\nassert lib.books[0].available is False, "после выдачи книга недоступна"'),
+  P('Повторная выдача той же книги — ValueError', 'lib = Library()\nlib.add_book(Book("Чистый код", "Роберт Мартин", 2008))\nlib.borrow("Чистый код")\ntry:\n    lib.borrow("Чистый код")\n    _ok = False\nexcept ValueError:\n    _ok = True\nassert _ok, "нельзя выдать одну книгу дважды"'),
+  P('count должен возвращать количество книг', 'lib = Library()\nlib.add_book(Book("A", "Автор", 2000))\nlib.add_book(Book("B", "Автор", 2001))\nlib.add_book(Book("C", "Автор", 2002))\nassert lib.count == 3, "в библиотеке 3 книги"'),
+]},
+]},
+];
+
+/* плоский индекс уроков */
+const ALL = [];
+COURSE.forEach((mod, i) => mod.lessons.forEach((l, j) => {
+  ALL.push({ lesson:l, mod, mIdx:i, lIdx:j });
+}));
+const TOTAL = ALL.length;
+const doneCount = () => ALL.filter(a => S.done[a.lesson.id]).length;
+const firstUndone = () => ALL.find(a => !S.done[a.lesson.id]) || ALL[0];
+
+/* ================================================================
+   СОСТОЯНИЕ И ПРОГРЕСС
+   ================================================================ */
+const LS_KEY = 'pycamp.v1';
+let S;
+try { S = JSON.parse(localStorage.getItem(LS_KEY)) || {}; } catch(e){ S = {}; }
+S.done = S.done || {}; S.drafts = S.drafts || {}; S.xp = S.xp || 0; S.streak = S.streak || 0; S.last = S.last || null; S.name = S.name || '';
+const save = () => { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch(e){} };
+
+function touchStreak(){
+  const today = new Date().toISOString().slice(0,10);
+  if (S.last === today) return;
+  const yest = new Date(Date.now() - 864e5).toISOString().slice(0,10);
+  S.streak = (S.last === yest) ? S.streak + 1 : 1;
+  S.last = today;
+  save();
+}
+function updateHeader(){
+  $('#hdrStreak').innerHTML = ic('flame',15) + `<span>${S.streak}</span>`;
+  $('#hdrXp').innerHTML = ic('zap',15) + `<span>${S.xp.toLocaleString('ru')} XP</span>`;
+  $('#hdrbar').style.width = (doneCount() / TOTAL * 100).toFixed(1) + '%';
+  $$('#mainnav a').forEach(a => a.classList.toggle('active',
+    (a.dataset.r === '/' && !location.hash.startsWith('#/cert')) ||
+    (a.dataset.r === '/cert' && location.hash.startsWith('#/cert'))));
+}
+function completeLesson(id){
+  if (S.done[id]) return false;
+  S.done[id] = 1; S.xp += 100; save(); updateHeader(); renderHeaderProgressBits();
+  return true;
+}
+
+/* ================================================================
+   PYTHON-ДВИЖОК: Web Worker + Pyodide
+   ================================================================ */
+const WORKER_SRC = `
+importScripts("https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js");
+var pyodide = null, bootPromise = null;
+function boot(){
+  if (!bootPromise){
+    bootPromise = (async () => {
+      try {
+        pyodide = await loadPyodide();
+        postMessage({ type: "ready" });
+      } catch(e){
+        bootPromise = null;
+        postMessage({ type: "bootfail", msg: String(e) });
+      }
+    })();
+  }
+  return bootPromise;
+}
+boot();
+onmessage = async function(ev){
+  var d = ev.data;
+  if (d.type !== "run") return;
+  await boot();
+  if (!pyodide){ postMessage({ id:d.id, out:"", error:"Не удалось загрузить Python (Pyodide). Проверь подключение к интернету и обнови страницу.", results:[] }); return; }
+  var out = "";
+  pyodide.setStdout({ batched: function(s){ out += /\\n$/.test(s) ? s : s + "\\n"; } });
+  pyodide.setStderr({ batched: function(s){ out += /\\n$/.test(s) ? s : s + "\\n"; } });
+  if (d.stdin != null){
+    var lines = d.stdin.split("\\n"), i = 0;
+    pyodide.setStdin({ stdin: function(){ return i < lines.length ? lines[i++] : ""; } });
+  } else {
+    pyodide.setStdin({ stdin: function(){ return ""; } });
+  }
+  var results = [], error = null;
+  var dictCtor = pyodide.globals.get("dict");
+  var ns = dictCtor();
+  try {
+    await pyodide.runPythonAsync(d.code, { globals: ns });
+  } catch(err){
+    error = (err && err.message) ? String(err.message) : String(err);
+  }
+  if (!error){
+    try { await pyodide.runPythonAsync("_out = " + JSON.stringify(out), { globals: ns }); } catch(_){}
+    for (var k = 0; k < d.tests.length; k++){
+      try {
+        await pyodide.runPythonAsync(d.tests[k], { globals: ns });
+        results.push({ pass: true });
+      } catch(te){
+        var msg = (te && te.message) ? String(te.message) : String(te);
+        var lines2 = msg.trim().split("\\n");
+        var last = lines2[lines2.length - 1] || "тест не пройден";
+        last = last.replace(/^[\\w]+(?:Error|Warning|Exception)\\s*:\\s*/, "");
+        results.push({ pass: false, msg: last });
+      }
+    }
+  }
+  try { ns.destroy(); } catch(_){}
+  postMessage({ id: d.id, out: out, error: error, results: results });
+};
+`;
+let pyWorker = null, pyStatus = 'off', jobId = 0;
+const jobs = {};
+
+function ensureWorker(){
+  if (pyWorker) return;
+  pyStatus = 'load'; updatePyBadge();
+  try {
+    const blob = new Blob([WORKER_SRC], { type:'text/javascript' });
+    pyWorker = new Worker(URL.createObjectURL(blob));
+  } catch(e){ pyStatus = 'error'; updatePyBadge(); return; }
+  pyWorker.onmessage = (e) => {
+    const d = e.data;
+    if (d.type === 'ready'){ pyStatus = 'ready'; updatePyBadge(); return; }
+    if (d.type === 'bootfail'){ pyStatus = 'error'; updatePyBadge(); toast('Не удалось загрузить Python: ' + (d.msg||'').slice(0,80), 'err'); return; }
+    const job = jobs[d.id];
+    if (job){ clearTimeout(job.timer); delete jobs[d.id]; job.resolve(d); }
+  };
+  pyWorker.onerror = () => { pyStatus = 'error'; updatePyBadge(); };
+}
+function runPy(payload, timeout = 20000){
+  ensureWorker();
+  return new Promise((resolve, reject) => {
+    const id = ++jobId;
+    jobs[id] = { resolve, reject };
+    jobs[id].timer = setTimeout(() => {
+      delete jobs[id];
+      if (pyWorker){ try{ pyWorker.terminate(); }catch(_){} pyWorker = null; }
+      pyStatus = 'off'; updatePyBadge();
+      reject(new Error('timeout'));
+    }, timeout);
+    payload.id = id;
+    pyWorker.postMessage(payload);
+  });
+}
+function updatePyBadge(){
+  const el = $('.pyst');
+  if (!el) return;
+  el.className = 'pyst ' + (pyStatus === 'ready' ? 'ready' : pyStatus === 'error' ? 'err' : 'load');
+  el.lastChild.textContent = pyStatus === 'ready' ? 'Python 3.11 · готов'
+    : pyStatus === 'error' ? 'Python не загрузился' : 'Загружаю Python…';
+}
+function prettyErr(msg){
+  const lines = String(msg).split('\n').filter(Boolean)
+    .filter(l => !/^PythonError/.test(l) && !/^\s*File ["'<]/.test(l));
+  return lines.join('\n').trim() || String(msg);
+}
+
+/* ================================================================
+   TOASTS / КОНФЕТТИ / МОДАЛ
+   ================================================================ */
+function toast(msg, type='ok'){
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = ic(type === 'err' ? 'x' : 'check', 18) + `<span>${escH(msg)}</span>`;
+  $('#toasts').appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 400); }, 3400);
+}
+function confetti(){
+  const cv = $('#confetti'), ctx = cv.getContext('2d');
+  cv.width = innerWidth; cv.height = innerHeight;
+  const colors = ['#ffd43b', '#eae8e2', '#6fa8d6', '#f2c452'];
+  const parts = Array.from({length:70}, () => ({
+    x: innerWidth/2 + (Math.random()-0.5)*220, y: innerHeight*0.4,
+    vx: (Math.random()-0.5)*11, vy: -Math.random()*13-3,
+    w: 4+Math.random()*5, h: 3+Math.random()*6, r: Math.random()*Math.PI,
+    vr: (Math.random()-0.5)*0.3, c: colors[Math.random()*colors.length|0]
+  }));
+  const t0 = performance.now();
+  (function frame(t){
+    const dt = t - t0;
+    ctx.clearRect(0,0,cv.width,cv.height);
+    parts.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.32; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+      ctx.fillStyle = p.c; ctx.globalAlpha = Math.max(0, 1 - dt/1400);
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h); ctx.restore();
+    });
+    if (dt < 1500) requestAnimationFrame(frame); else ctx.clearRect(0,0,cv.width,cv.height);
+  })(t0);
+}
+function modal(html){ $('#modalCard').innerHTML = html; $('#modal').classList.add('show'); }
+ $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') $('#modal').classList.remove('show'); });
+
+/* ================================================================
+   РОУТЕР
+   ================================================================ */
+let heroTimers = [];
+function clearHero(){ heroTimers.forEach(clearTimeout); heroTimers = []; }
+
+function route(){
+  clearHero();
+  const h = location.hash || '#/';
+  const m = h.match(/^#\/lesson\/([\w-]+)$/);
+  if (m){
+    const found = ALL.find(a => a.lesson.id === m[1]);
+    if (found){ renderLesson(found); updateHeader(); return; }
+  }
+  if (h.startsWith('#/cert')){ renderCert(); updateHeader(); return; }
+  renderHome(); updateHeader();
+}
+window.addEventListener('hashchange', route);
+
+/* ================================================================
+   ГЛАВНАЯ: hero + терминал + тропа курса
+   ================================================================ */
+const DEMOS = [
+  { code:'# Мой первый курс\nfor i in range(1, 4):\n    print(f"Урок {i} — пройден")\nprint("Python — это легко!")',
+    out:['Урок 1 — пройден','Урок 2 — пройден','Урок 3 — пройден','Python — это легко!'] },
+  { code:'word = "программирование"\nprint("Длина слова:", len(word))\nprint("Первые буквы:", word[:3])',
+    out:['Длина слова: 15','Первые буквы: прог'] },
+  { code:'total = 0\nfor n in range(1, 101):\n    total += n\nprint("Сумма от 1 до 100:", total)',
+    out:['Сумма от 1 до 100: 5050'] },
+];
+
+function renderHome(){
+  const d = doneCount();
+  const next = firstUndone();
+  const hours = Math.round(TOTAL * 18 / 60);
+  const cta = d === 0
+    ? `<a class="btn btn-p" href="#/lesson/${next.lesson.id}">${ic('play',16)} Начать первый урок</a>
+       <a class="btn btn-g" href="#track">${ic('book',16)} Посмотреть программу</a>`
+    : `<a class="btn btn-p" href="#/lesson/${next.lesson.id}">${ic('play',16)} Продолжить обучение</a>
+       <a class="btn btn-g" href="#/cert">${ic('award',16)} Сертификат</a>`;
+  const prog = d === 0 ? '' : `
+    <div class="hero-prog">Пройдено <b>${d}</b> ${plural(d,['урок','урока','уроков'])} · ${Math.round(d/TOTAL*100)}% курса
+      <div class="hbar"><i style="width:${(d/TOTAL*100).toFixed(1)}%"></i></div>
+    </div>`;
+
+  app.innerHTML = `
+  <section class="hero"><div class="wrap hero-grid">
+    <div>
+      <div class="overline">Бесплатный открытый курс</div>
+      <h1 class="big">Учи <em>Python</em>,<br>не выходя<br>из браузера</h1>
+      <p class="hero-sub">${TOTAL} интерактивных ${plural(TOTAL,['урок','урока','уроков'])}: теория, задачи с автотестами и настоящий интерпретатор Python прямо на странице. Без регистрации, без серверов, навсегда.</p>
+      <div class="hero-cta">${cta}</div>
+      <div class="hero-facts">
+        <div class="fact"><b>${COURSE.length}</b><i>модулей</i></div>
+        <div class="fact"><b>${TOTAL}</b><i>уроков</i></div>
+        <div class="fact"><b>≈${hours} ч</b><i>практики</i></div>
+        <div class="fact"><b>0 ₽</b><i>навсегда</i></div>
+      </div>
+      ${prog}
+    </div>
+    <div class="term">
+      <div class="term-bar"><span class="dots"><i></i><i></i><i></i></span>learner@pycamp: ~/lesson.py <span class="term-cur"></span></div>
+      <div class="term-body" id="heroTerm"></div>
+    </div>
+  </div></section>
+
+  <section class="track-sec" id="track"><div class="wrap">
+    <div class="sec-head">
+      <h2 class="sec">Программа курса</h2>
+      <span class="sec-note">проходи по порядку — или прыгай куда интересно</span>
+      <div class="search">${ic('search',16)}<input id="trkSearch" type="text" placeholder="Поиск урока…"></div>
+    </div>
+    <div class="track" id="trackList"></div>
+    <div class="cert-tease">
+      ${ic('award', 30)}
+      <div><b>Именной сертификат</b><p>Пройди все ${TOTAL} ${plural(TOTAL,['урок','урока','уроков'])} — и сертификат о завершении курса твой. Бесплатно, как всё здесь.</p></div>
+      <a class="btn btn-g" href="#/cert">Как это выглядит</a>
+    </div>
+  </div></section>`;
+
+  renderTrack();
+  typewriter();
+
+  $('#trkSearch').addEventListener('input', e => {
+    const q = e.target.value.trim().toLowerCase();
+    $$('#trackList .lsn').forEach(el => el.classList.toggle('hide', !!q && !el.dataset.s.includes(q)));
+    $$('#trackList .trk').forEach(el => {
+      const any = $$('.lsn', el).some(l => !l.classList.contains('hide'));
+      el.classList.toggle('hide', !!q && !any);
+      if (q && any) el.classList.add('open');
+      if (!q) el.classList.remove('open');
+    });
+  });
+}
+
+function renderTrack(){
+  const box = $('#trackList');
+  box.innerHTML = COURSE.map((mod, mi) => {
+    const done = mod.lessons.filter(l => S.done[l.id]).length;
+    const total = mod.lessons.length;
+    const p = done / total, C = 2 * Math.PI * 23;
+    const modDone = done === total;
+    return `
+    <div class="trk ${modDone ? 'done' : ''}" data-s="${(mod.title + ' ' + mod.desc).toLowerCase()}">
+      <div class="trk-node">
+        <svg class="ring" width="56" height="56" viewBox="0 0 56 56">
+          <circle class="bgc" cx="28" cy="28" r="23"></circle>
+          <circle class="fgc" cx="28" cy="28" r="23" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C*(1-p)).toFixed(1)}"></circle>
+          <text x="28" y="33" text-anchor="middle">${String(mi+1).padStart(2,'0')}</text>
+        </svg>
+      </div>
+      <div class="trk-box">
+        <div class="trk-head" data-mi="${mi}">
+          <div>
+            <div class="trk-title">${mod.title}</div>
+            <div style="color:var(--mut); font-size:13.5px; margin-top:3px">${mod.desc}</div>
+          </div>
+          <div class="trk-meta">${done} / ${total} · ${modDone ? 'модуль пройден' : plural(done,['урок пройден','урока пройдено','уроков пройдено'])}</div>
+          <span class="trk-ch">${ic('chev', 20)}</span>
+        </div>
+        <div class="trk-list"><div><div class="trk-lessons">
+          ${mod.lessons.map((l, li) => {
+            const dn = !!S.done[l.id];
+            return `<div class="lsn ${dn?'done':''}" data-id="${l.id}" data-s="${l.t.toLowerCase()}">
+              <span class="lsn-dot">${dn ? ic('check',12) : ''}</span>
+              <span class="lsn-t">${l.t}</span>
+              <span class="lsn-num">${mi+1}.${li+1}</span>
+            </div>`;
+          }).join('')}
+        </div></div></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  $$('.trk-head', box).forEach(h => h.addEventListener('click', () => h.closest('.trk').classList.toggle('open')));
+  $$('.lsn', box).forEach(l => l.addEventListener('click', () => { location.hash = '#/lesson/' + l.dataset.id; }));
+}
+
+/* печатающаяся консоль в hero */
+function typewriter(){
+  const el = $('#heroTerm');
+  if (!el) return;
+  let di = 0;
+  function play(){
+    const demo = DEMOS[di % DEMOS.length]; di++;
+    const code = demo.code;
+    let pos = 0, outShown = 0;
+    const speed = Math.max(14, 46 - code.length / 30);
+    el.innerHTML = '';
+    const cmd = document.createElement('div'); cmd.className = 'term-cmd'; el.appendChild(cmd);
+    const out = document.createElement('div'); out.className = 'term-out';
+    function typeCode(){
+      if (pos <= code.length){
+        cmd.textContent = '$ python ' + code.slice(0, pos);
+        pos += 1;
+        heroTimers.push(setTimeout(typeCode, speed));
+      } else {
+        el.appendChild(out);
+        heroTimers.push(setTimeout(showOut, 420));
+      }
+    }
+    function showOut(){
+      if (outShown < demo.out.length){
+        const line = document.createElement('div'); line.textContent = demo.out[outShown];
+        out.appendChild(line); outShown++;
+        heroTimers.push(setTimeout(showOut, 330));
+      } else {
+        heroTimers.push(setTimeout(play, 2600));
+      }
+    }
+    typeCode();
+  }
+  play();
+}
+
+/* ================================================================
+   СТРАНИЦА УРОКА
+   ================================================================ */
+let cur = null; // {entry, state, edElements}
+
+function renderLesson(entry){
+  const { lesson:l, mod, lIdx, mIdx } = entry;
+  const prev = ALL[ALL.indexOf(entry) - 1];
+  const next = ALL[ALL.indexOf(entry) + 1];
+  const dn = !!S.done[l.id];
+  const draft = S.drafts[l.id] != null ? S.drafts[l.id] : l.code;
+
+  document.body.dataset.tab = 'th';
+  app.innerHTML = `
+  <div class="wrap">
+    <div class="lesson-head">
+      <div class="crumb">
+        <a href="#/">Программа</a> ${ic('arrl',12)}
+        <a href="#/">Модуль ${String(mIdx+1).padStart(2,'0')} · ${mod.title}</a>
+      </div>
+      <h1>${l.t}</h1>
+      <div class="lmeta">
+        <span class="pill">Урок ${lIdx+1} из ${mod.lessons.length}</span>
+        <span class="pill">${dn ? 'пройден ранее' : 'не пройден'}</span>
+        <span class="pill ${pyStatus==='ready'?'ok':''}" id="lpySt">Python 3.11 · WASM</span>
+      </div>
+    </div>
+
+    <div class="lesson-tabs">
+      <button data-t="th" class="on">Теория и тесты</button>
+      <button data-t="ed">Редактор кода</button>
+    </div>
+
+    <div class="lesson-grid">
+      <div class="col-th">
+        <div class="th sec-body" id="thBody"></div>
+
+        <div class="sec-t">Задание</div>
+        <div class="th" id="taskBody"></div>
+
+        <div class="sec-t">Тесты</div>
+        <div class="t-count" id="tCount">0 из ${l.tests.length} пройдено</div>
+        <ul class="tests" id="testList"></ul>
+        <div class="actions">
+          <button class="btn btn-p" id="btnCheck">${ic('check',17)} Проверить код</button>
+          <span style="align-self:center; color:var(--mut); font:500 12px var(--mono)">или <kbd>Ctrl</kbd>+<kbd>Enter</kbd> для запуска</span>
+        </div>
+        <div id="nextBanner"></div>
+
+        <div class="sol-block" id="solBlock">
+          <button class="btn btn-g btn-sm" id="btnSol">${ic('book',15)} Показать решение</button>
+          <div class="sol-body"><pre class="code" id="solCode"></pre></div>
+          <div class="sol-warn" id="solWarn"></div>
+        </div>
+
+        <div class="lesson-nav">
+          ${prev ? `<a class="btn btn-g" href="#/lesson/${prev.lesson.id}">${ic('arrl',16)} ${escH(prev.lesson.t.slice(0,26))}${prev.lesson.t.length>26?'…':''}</a>` : '<span></span>'}
+          ${next ? `<a class="btn btn-p" href="#/lesson/${next.lesson.id}">${escH(next.lesson.t.slice(0,26))}${next.lesson.t.length>26?'…':''} ${ic('arrr',16)}</a>`
+                 : `<a class="btn btn-p" href="#/cert">Сертификат ${ic('award',16)}</a>`}
+        </div>
+      </div>
+
+      <div class="col-ed">
+        <div class="ed">
+          <div class="ed-bar">
+            <span class="ed-file">lesson.py</span>
+            <span class="pyst load"><i></i><span>Загружаю Python…</span></span>
+            <button class="btn btn-g btn-ic" id="btnRun" title="Запустить код (Ctrl+Enter)">${ic('play',15)}</button>
+            <button class="btn btn-g btn-ic" id="btnReset" title="Сбросить к исходному коду">${ic('reset',15)}</button>
+          </div>
+          <div class="ed-body">
+            <div class="ed-gutter" id="edGutter"></div>
+            <div class="ed-scroll">
+              <pre class="ed-hl" id="edHl" aria-hidden="true"><code id="edHlCode"></code></pre>
+              <textarea class="ed-ta" id="edTa" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" aria-label="Редактор кода"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="console" id="console"><span class="c-ph">Вывод программы появится здесь…</span></div>
+      </div>
+    </div>
+  </div>`;
+
+  /* теория и задание */
+  $('#thBody').innerHTML = renderTh(l.th);
+  $('#taskBody').innerHTML = renderTh(l.task);
+
+  /* редактор */
+  const ta = $('#edTa'), hlCode = $('#edHlCode'), gutter = $('#edGutter'), consoleEl = $('#console');
+  ta.value = draft;
+  function refresh(){
+    hlCode.innerHTML = hl(ta.value) + '\n';
+    const n = ta.value.split('\n').length;
+    gutter.innerHTML = Array.from({length:n}, (_,i) => i+1).join('\n');
+    gutter.scrollTop = ta.scrollTop;
+  }
+  function syncScroll(){
+    const pre = $('#edHl');
+    pre.scrollTop = ta.scrollTop; pre.scrollLeft = ta.scrollLeft;
+    gutter.scrollTop = ta.scrollTop;
+  }
+  ta.addEventListener('input', () => {
+    refresh();
+    clearTimeout(ta._t);
+    ta._t = setTimeout(() => { S.drafts[l.id] = ta.value; save(); }, 500);
+  });
+  ta.addEventListener('scroll', syncScroll);
+  ta.addEventListener('keydown', e => {
+    if (e.key === 'Tab'){
+      e.preventDefault();
+      const s = ta.selectionStart, epos = ta.selectionEnd;
+      ta.value = ta.value.slice(0,s) + '    ' + ta.value.slice(epos);
+      ta.selectionStart = ta.selectionEnd = s + 4;
+      refresh();
+    } else if (e.key === 'Enter'){
+      const s = ta.selectionStart;
+      const line = ta.value.slice(0, s).split('\n').pop();
+      const indent = (line.match(/^\s*/) || [''])[0] + (/:\s*$/.test(line) ? '    ' : '');
+      if (indent){
+        e.preventDefault();
+        ta.value = ta.value.slice(0, s) + '\n' + indent + ta.value.slice(ta.selectionEnd);
+        ta.selectionStart = ta.selectionEnd = s + 1 + indent.length;
+        refresh();
+      }
+    } else if ((e.ctrlKey || e.metaKey) && e.key === 'Enter'){
+      e.preventDefault(); runCode();
+    }
+  });
+  refresh();
+  ensureWorker(); updatePyBadge();
+
+  cur = { entry, state: null };
+
+  /* рендер списка тестов */
+  function renderTests(){
+    const list = $('#testList');
+    list.innerHTML = l.tests.map((t, i) => {
+      const st = cur.state ? cur.state[i] : null;
+      const cls = st ? (st.pass ? 't-pass' : 't-fail') : '';
+      return `<li class="${cls}">
+        <span class="t-ic">${ic(st ? (st.pass ? 'check' : 'x') : 'check', 12)}</span>
+        <span>${escH(t.txt)}</span>
+        ${st && !st.pass && st.msg ? `<div class="t-msg">${escH(st.msg)}</div>` : ''}
+      </li>`;
+    }).join('');
+    const n = cur.state ? cur.state.filter(s => s.pass).length : 0;
+    $('#tCount').innerHTML = `<b>${n}</b> из ${l.tests.length} пройдено`;
+  }
+  renderTests();
+
+  /* консоль */
+  function showConsole(out, error){
+    consoleEl.innerHTML = '';
+    if (out && out.trim()){
+      const o = document.createElement('div'); o.className = 'c-out';
+      o.textContent = out.replace(/\n+$/,'');
+      consoleEl.appendChild(o);
+    }
+    if (error){
+      const er = document.createElement('div'); er.className = 'c-err';
+      er.textContent = prettyErr(error);
+      consoleEl.appendChild(er);
+    }
+    if (!out.trim() && !error){
+      const ph = document.createElement('div'); ph.className = 'c-ph'; ph.textContent = '(программа ничего не вывела)';
+      consoleEl.appendChild(ph);
+    }
+    consoleEl.scrollTop = consoleEl.scrollHeight;
+  }
+
+  /* запуск без проверки */
+  async function runCode(){
+    const btn = $('#btnRun'); btn.disabled = true;
+    consoleEl.innerHTML = '<div class="c-inf">$ python lesson.py — запускаю…</div>';
+    try {
+      const res = await runPy({ code: ta.value, stdin: l.stdin || null, tests: [] });
+      showConsole(res.out, res.error);
+    } catch(e){
+      consoleEl.innerHTML = `<div class="c-err">${e.message === 'timeout'
+        ? 'Превышено время выполнения (20 секунд). Скорее всего — бесконечный цикл: проверь условие while.'
+        : 'Ошибка запуска: ' + escH(e.message)}</div>`;
+    }
+    btn.disabled = false;
+  }
+  $('#btnRun').addEventListener('click', runCode);
+
+  /* проверка */
+  async function check(){
+    const btn = $('#btnCheck'); btn.disabled = true;
+    consoleEl.innerHTML = '<div class="c-inf">$ python lesson.py — запускаю и проверяю тесты…</div>';
+    if (window.innerWidth <= 980) document.body.dataset.tab = 'ed';
+    const pyTests = l.tests.filter(t => t.py).map(t => t.py);
+    let res;
+    try {
+      res = await runPy({ code: ta.value, stdin: l.stdin || null, tests: pyTests });
+    } catch(e){
+      consoleEl.innerHTML = `<div class="c-err">${e.message === 'timeout'
+        ? 'Превышено время выполнения (20 секунд). Кажется, программа зациклилась — проверь условия while и счётчики.'
+        : 'Не удалось выполнить код: ' + escH(e.message)}</div>`;
+      btn.disabled = false; return;
+    }
+    showConsole(res.out, res.error);
+
+    if (res.error){
+      toast('В коде ошибка — исправь и проверь снова', 'err');
+      cur.state = l.tests.map(() => ({ pass:false, msg:'код завершился с ошибкой' }));
+      renderTests(); btn.disabled = false; return;
+    }
+
+    let pi = 0;
+    cur.state = l.tests.map(t => {
+      if (t.py){ const r = res.results[pi++]; return { pass: r.pass, msg: r.msg }; }
+      const pass = !!t.js(ta.value, res.out);
+      return { pass, msg: pass ? null : 'проверка не пройдена' };
+    });
+    renderTests();
+    const all = cur.state.every(s => s.pass);
+    if (all){
+      const isNew = completeLesson(l.id);
+      if (isNew){
+        confetti();
+        toast(`Урок пройден! +100 XP`);
+        const nt = ALL[ALL.indexOf(entry) + 1];
+        $('#nextBanner').innerHTML = `<div class="success-banner">
+          ${ic('check', 22)} <b>Отлично! Урок засчитан.</b>
+          ${nt ? `<a class="btn btn-p btn-sm" href="#/lesson/${nt.lesson.id}">Следующий урок ${ic('arrr',15)}</a>`
+               : `<a class="btn btn-p btn-sm" href="#/cert">Получить сертификат ${ic('award',15)}</a>`}
+        </div>`;
+        const modDone = mod.lessons.every(x => S.done[x.id]);
+        if (modDone) setTimeout(() => toast(`Модуль «${mod.title}» пройден полностью!`), 700);
+        if (doneCount() === TOTAL) setTimeout(() => modal(`
+          ${ic('award', 40)}<h3>Курс пройден полностью!</h3>
+          <p>Все ${TOTAL} ${plural(TOTAL,['урок','урока','уроков'])} — зелёные. Ты только что прошёл весь путь от print() до собственных классов. Забирай заслуженный сертификат.</p>
+          <a class="btn btn-p" href="#/cert" onclick="document.getElementById('modal').classList.remove('show')">${ic('award',16)} Получить сертификат</a>
+        `), 900);
+        $('.lmeta .pill:nth-child(2)').textContent = 'пройден';
+        $('.lmeta .pill:nth-child(2)').classList.add('ok');
+      } else {
+        toast('Все тесты снова зелёные — отличная форма!');
+      }
+    } else {
+      $('#nextBanner').innerHTML = '';
+    }
+    btn.disabled = false;
+  }
+  $('#btnCheck').addEventListener('click', check);
+
+  /* сброс с двухшаговым подтверждением */
+  const rb = $('#btnReset');
+  rb.addEventListener('click', () => {
+    if (rb.classList.contains('armed')){
+      rb.classList.remove('armed');
+      ta.value = l.code; delete S.drafts[l.id]; save();
+      refresh(); showConsole('Код сброшен к исходному.', null);
+      renderTests(); cur.state = null; renderTests();
+    } else {
+      rb.classList.add('armed'); rb.title = 'Точно сбросить?';
+      setTimeout(() => rb.classList.remove('armed'), 2500);
+    }
+  });
+
+  /* решение с двухшаговым подтверждением */
+  const sb = $('#btnSol'), sblk = $('#solBlock'), swarn = $('#solWarn');
+  $('#solCode').textContent = l.sol;
+  $('#solCode').innerHTML = hl(l.sol);
+  sb.addEventListener('click', () => {
+    if (sblk.classList.contains('open')){ sblk.classList.remove('open'); sb.innerHTML = `${ic('book',15)} Показать решение`; return; }
+    if (sb.classList.contains('armed')){
+      sb.classList.remove('armed');
+      sblk.classList.add('open');
+      sb.innerHTML = `${ic('x',15)} Скрыть решение`;
+      swarn.textContent = '';
+    } else {
+      sb.classList.add('armed');
+      swarn.textContent = 'Сначала попробуй сам — решение никуда не убежит. Нажми ещё раз, чтобы всё-таки увидеть.';
+      setTimeout(() => { sb.classList.remove('armed'); swarn.textContent = ''; }, 3000);
+    }
+  });
+
+  /* мобильные вкладки */
+  $$('.lesson-tabs button').forEach(b => b.addEventListener('click', () => {
+    document.body.dataset.tab = b.dataset.t;
+    $$('.lesson-tabs button').forEach(x => x.classList.toggle('on', x === b));
+  }));
+}
+
+/* ================================================================
+   СЕРТИФИКАТ
+   ================================================================ */
+function renderCert(){
+  clearHero();
+  const d = doneCount();
+  const all = d === TOTAL;
+  const dateStr = new Date().toLocaleDateString('ru-RU', { day:'numeric', month:'long', year:'numeric' });
+  const certId = 'PC-' + String(TOTAL) + '-' + (S.name ? S.name.length : 0) + '-' + (d * 137 % 997);
+  app.innerHTML = `
+  <div class="wrap cert-page">
+    <h1>Сертификат о завершении</h1>
+    <p class="sec-note" style="color:var(--mut)">Именной сертификат PyCamp · Полный курс Python</p>
+    ${all ? `
+      <div class="cert-edit">
+        <input id="certName" type="text" placeholder="Твоё имя для сертификата" value="${escH(S.name)}" maxlength="40">
+        <button class="btn btn-g" id="certSave">Сохранить имя</button>
+      </div>
+      <div class="cert-sheet" id="certSheet">
+        <div class="cert-brand">PYCAMP</div>
+        <div class="cert-kind">Сертификат о прохождении</div>
+        <div class="cert-name" id="certNameView">${escH(S.name || 'Выпускник PyCamp')}</div>
+        <div class="cert-body">успешно завершил(а) полный курс программирования на языке Python —
+        ${COURSE.length} модулей, ${TOTAL} ${plural(TOTAL,['интерактивный урок','интерактивных урока','интерактивных уроков'])}:
+        от первой строки кода до объектно-ориентированного проектирования.</div>
+        <div class="cert-row"><span>Дата выдачи</span><b>${dateStr}</b></div>
+        <div class="cert-row" style="margin-top:10px"><span>Номер сертификата</span><b>${certId}</b></div>
+      </div>
+      <div class="cert-actions">
+        <button class="btn btn-p" onclick="window.print()">${ic('book',16)} Распечатать / сохранить в PDF</button>
+      </div>
+    ` : `
+      <div class="cert-locked">
+        ${ic('lock', 36)}
+        <h2 style="font:700 20px var(--disp); margin-bottom:8px">Сертификат пока заперт</h2>
+        <p>Пройдено <b style="color:var(--tx)">${d}</b> из ${TOTAL} ${plural(TOTAL,['урока','урока','уроков'])} (${Math.round(d/TOTAL*100)}%). Осталось ${TOTAL - d} — и он твой.</p>
+        <div class="hbar" style="margin:20px auto 26px"><i style="width:${(d/TOTAL*100).toFixed(1)}%"></i></div>
+        <a class="btn btn-p" href="#/lesson/${firstUndone().lesson.id}">${ic('play',16)} Продолжить обучение</a>
+      </div>
+    `}
+  </div>`;
+  if (all){
+    $('#certName').addEventListener('input', e => {
+      S.name = e.target.value.trim();
+      $('#certNameView').textContent = S.name || 'Выпускник PyCamp';
+      save();
+    });
+    $('#certSave').addEventListener('click', () => { save(); toast('Имя сохранено'); });
+  }
+}
+
+/* ================================================================
+   ЗАПУСК
+   ================================================================ */
+function renderHeaderProgressBits(){ updateHeader(); }
+touchStreak();
+route();
+</script>
+</body>
+</html>

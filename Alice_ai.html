@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Python Mini Camp — учебный тренажёр</title>
+    <style>
+        :root { --primary: #4c78a8; --success: #2e7d32; --danger: #c62828; --bg: #f5f7fa; --text: #333; }
+        body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; padding: 1rem; background: var(--bg); color: var(--text); }
+        .course { max-width: 900px; margin: 0 auto; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h1, h2 { color: var(--primary); }
+        .lesson { margin-bottom: 2.5rem; border-bottom: 1px solid #eee; padding-bottom: 1.5rem; }
+        .task { margin-top: 1.5rem; background: #fafafa; padding: 1rem; border-left: 4px solid var(--primary); border-radius: 6px; }
+        textarea { width: 100%; height: 140px; font-family: monospace; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; background: #fff; }
+        button { padding: 0.6rem 1.2rem; background: var(--primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        button:hover { background: #3b5f85; }
+        .result { margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; display: none; }
+        .success { background: #e8f5e9; color: var(--success); border: 1px solid var(--success); }
+        .error { background: #ffebee; color: var(--danger); border: 1px solid var(--danger); }
+        pre { background: #f4f4f4; padding: 0.5rem; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="course">
+        <h1>Python Mini Camp</h1>
+        <p>Мини‑курс по основам Python в одном HTML‑файле. Пиши код в редакторе и нажимай «Проверить».</p>
+
+        <!-- Урок 1 -->
+        <div class="lesson">
+            <h2>1. Переменные и вывод</h2>
+            <p>В Python переменные создаются присваиванием. <code>print()</code> выводит текст.</p>
+            <pre><code>name = "Алексей"
+print("Привет, " + name)</code></pre>
+            <div class="task">
+                <p><strong>Задание:</strong> Создай переменную <code>city</code> со значением «Москва» и выведи фразу: «Я живу в Москве».</p>
+                <textarea id="code1" placeholder="Напиши код здесь..."></textarea>
+                <br><br>
+                <button onclick="checkTask(1, code1Checker)">Проверить</button>
+                <div id="result1" class="result"></div>
+            </div>
+        </div>
+
+        <!-- Урок 2 -->
+        <div class="lesson">
+            <h2>2. Условные операторы</h2>
+            <p>Конструкция <code>if-else</code> позволяет выполнять код по условию.</p>
+            <pre><code>age = 18
+if age >= 18:
+    print("Доступ разрешён")
+else:
+    print("Доступ запрещён")</code></pre>
+            <div class="task">
+                <p><strong>Задание:</strong> Переменная <code>score</code> равна 75. Если <code>score >= 60</code>, выведи «Зачёт», иначе — «Пересдача».</p>
+                <textarea id="code2" placeholder="Напиши код здесь..."></textarea>
+                <br><br>
+                <button onclick="checkTask(2, code2Checker)">Проверить</button>
+                <div id="result2" class="result"></div>
+            </div>
+        </div>
+
+        <!-- Урок 3 -->
+        <div class="lesson">
+            <h2>3. Циклы и списки</h2>
+            <p>Цикл <code>for</code> перебирает элементы списка. <code>range()</code> создаёт последовательность чисел.</p>
+            <pre><code>numbers = [1, 2, 3]
+for n in numbers:
+    print(n)</code></pre>
+            <div class="task">
+                <p><strong>Задание:</strong> Выведи квадраты чисел от 1 до 5 (каждое на новой строке). Используй <code>range(1, 6)</code>.</p>
+                <textarea id="code3" placeholder="Напиши код здесь..."></textarea>
+                <br><br>
+                <button onclick="checkTask(3, code3Checker)">Проверить</button>
+                <div id="result3" class="result"></div>
+            </div>
+        </div>
+
+        <!-- Урок 4 -->
+        <div class="lesson">
+            <h2>4. Функции</h2>
+            <p>Функция объявляется через <code>def</code>. Она может принимать аргументы и возвращать результат.</p>
+            <pre><code>def greet(name):
+    return f"Привет, {name}!"</code></pre>
+            <div class="task">
+                <p><strong>Задание:</strong> Напиши функцию <code>square(x)</code>, которая возвращает квадрат числа. Вызови её для числа 7 и выведи результат.</p>
+                <textarea id="code4" placeholder="Напиши код здесь..."></textarea>
+                <br><br>
+                <button onclick="checkTask(4, code4Checker)">Проверить</button>
+                <div id="result4" class="result"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Простой интерпретатор на базе WebAssembly/Pyodide не ставим, чтобы файл был лёгким.
+        // Вместо этого делаем проверку по ключевым словам и шаблонам — этого достаточно для учебных задач.
+
+        function showResult(id, isSuccess, message) {
+            const el = document.getElementById('result' + id);
+            el.className = 'result ' + (isSuccess ? 'success' : 'error');
+            el.style.display = 'block';
+            el.innerText = message;
+        }
+
+        function checkTask(id, checkerFn) {
+            const code = document.getElementById('code' + id).value.trim();
+            if (!code) {
+                showResult(id, false, 'Код пуст. Напиши решение.');
+                return;
+            }
+            try {
+                const res = checkerFn(code);
+                showResult(id, res.ok, res.msg);
+            } catch (e) {
+                showResult(id, false, 'Ошибка проверки: ' + e.message);
+            }
+        }
+
+        // Проверки для заданий
+        function code1Checker(code) {
+            if (code.includes('city = "Москва"') && (code.includes('print("Я живу в Москве")') || code.includes("print('Я живу в Москве')"))) {
+                return { ok: true, msg: 'Отлично! Задание выполнено.' };
+            } else {
+                return { ok: false, msg: 'Проверь: переменная city должна быть "Москва", а вывод — "Я живу в Москве".' };
+            }
+        }
+
+        function code2Checker(code) {
+            if (code.includes('score = 75') && (code.includes('if score >= 60') || code.includes('if score>=60')) && (code.includes('"Зачёт"') || code.includes("'Зачёт'")) && (code.includes('"Пересдача"') || code.includes("'Пересдача'"))) {
+                return { ok: true, msg: 'Верно! Ты разобрался с условиями.' };
+            } else {
+                return { ok: false, msg: 'Проверь: score = 75, условие if score >= 60, и оба варианта вывода.' };
+            }
+        }
+
+        function code3Checker(code) {
+            // Ищем цикл по range(1,6) и вывод квадратов
+            if ((code.includes('for i in range(1, 6)') || code.includes('for i in range(1,6)')) && code.includes('print(i * i)')) {
+                return { ok: true, msg: 'Молодец! Квадраты выведены правильно.' };
+            } else {
+                return { ok: false, msg: 'Используй for i in range(1, 6) и выводи i * i.' };
+            }
+        }
+
+        function code4Checker(code) {
+            if (code.includes('def square(x):') && code.includes('return x * x') && (code.includes('square(7)') || code.includes('print(square(7))'))) {
+                return { ok: true, msg: 'Супер! Функция работает.' };
+            } else {
+                return { ok: false, msg: 'Проверь определение функции square(x), return x*x и вызов square(7).' };
+            }
+        }
+    </script>
+</body>
+</html>
